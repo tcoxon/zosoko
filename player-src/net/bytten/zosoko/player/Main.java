@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.IPuzzleGenerator;
+import net.bytten.zosoko.TestPuzzleGenerator;
 
 
 public class Main extends JPanel {
@@ -53,9 +54,8 @@ public class Main extends JPanel {
     }
     
     protected IPuzzleGenerator makePuzzleGenerator(long seed) {
-        // TODO
-        // Uses getArg()
-        return null;
+        // TODO control generator with getArg()
+        return new TestPuzzleGenerator();
     }
     
     public void regenerate(final long seed) {

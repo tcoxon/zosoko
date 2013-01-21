@@ -26,6 +26,10 @@ public class Bounds {
         this.bottom = bottom;
     }
     
+    public Bounds(int width, int height) {
+        this(0, 0, width-1, height-1);
+    }
+    
     /**
      * Gets the width of the rectangle.
      * 
