@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,6 +16,7 @@ import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.IPuzzleGenerator;
 
 
@@ -26,7 +28,9 @@ public class Main extends JPanel {
     protected Dimension bufferDim;
     
     protected IPuzzleGenerator puzzleGen;
-    protected PuzzlePlayer puzzlePlayer;
+    protected IPuzzle puzzle;
+    protected Iterator<IPuzzle> puzzleIter;
+    protected PuzzleRenderer puzzleRenderer;
     
     protected Thread generatorThread;
     protected Timer repaintTimer;
@@ -37,7 +41,7 @@ public class Main extends JPanel {
         super();
         this.args = args;
         regenerate(getSeed(args));
-        puzzlePlayer = new PuzzlePlayer();
+        puzzleRenderer = new PuzzleRenderer();
         
         repaintTimer = new Timer();
         repaintTimer.schedule(new TimerTask() {
@@ -59,8 +63,11 @@ public class Main extends JPanel {
             generatorThread = new Thread() {
                 public void run() {
                     puzzleGen = makePuzzleGenerator(seed);
-                    if (puzzleGen != null)
+                    if (puzzleGen != null) {
                         puzzleGen.generate();
+                        puzzleIter = puzzleGen.getPuzzleSet().iterator();
+                        puzzle = puzzleIter.next();
+                    }
                     generatorThread = null;
                 }
             };
@@ -75,8 +82,8 @@ public class Main extends JPanel {
         bufferG.setColor(Color.WHITE);
         bufferG.fillRect(0, 0, bufferDim.width, bufferDim.height);
         
-        if (puzzleGen != null && puzzleGen.getPuzzle() != null) {
-            puzzlePlayer.draw(bufferG, bufferDim, puzzleGen.getPuzzle());
+        if (puzzle != null) {
+            puzzleRenderer.draw(bufferG, bufferDim, puzzle);
         }
         
         // Double-buffered drawing
@@ -117,7 +124,11 @@ public class Main extends JPanel {
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
                     System.exit(0);
                 else if (e.getKeyCode() == KeyEvent.VK_F5) {
-                    panel.regenerate(new Random().nextLong());
+                    if (panel.puzzleIter != null && panel.puzzleIter.hasNext()) {
+                        panel.puzzle = panel.puzzleIter.next();
+                    } else {
+                        panel.regenerate(new Random().nextLong());
+                    }
                 }
             }
 

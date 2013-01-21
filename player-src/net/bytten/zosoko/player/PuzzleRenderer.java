@@ -8,7 +8,7 @@ import java.awt.geom.AffineTransform;
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.util.Bounds;
 
-public class PuzzlePlayer {
+public class PuzzleRenderer {
 
     public void draw(Graphics2D g, Dimension dim, IPuzzle puzzle) {
         AffineTransform origXfm = g.getTransform();
