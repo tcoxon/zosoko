@@ -5,8 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.Random;
@@ -21,7 +21,7 @@ import net.bytten.zosoko.IPuzzleGenerator;
 import net.bytten.zosoko.TestPuzzleGenerator;
 
 
-public class Main extends JPanel {
+public class Main extends JPanel implements KeyListener {
     private static final long serialVersionUID = 1L;
 
     protected BufferedImage buffer;
@@ -29,7 +29,8 @@ public class Main extends JPanel {
     protected Dimension bufferDim;
     
     protected IPuzzleGenerator puzzleGen;
-    protected IPuzzle puzzle;
+    protected PlayingPuzzle puzzle;
+    protected PuzzleController controller;
     protected Iterator<IPuzzle> puzzleIter;
     protected PuzzleRenderer puzzleRenderer;
     
@@ -43,6 +44,7 @@ public class Main extends JPanel {
         this.args = args;
         regenerate(getSeed(args));
         puzzleRenderer = new PuzzleRenderer();
+        controller = new PuzzleController();
         
         repaintTimer = new Timer();
         repaintTimer.schedule(new TimerTask() {
@@ -66,7 +68,7 @@ public class Main extends JPanel {
                     if (puzzleGen != null) {
                         puzzleGen.generate();
                         puzzleIter = puzzleGen.getPuzzleSet().iterator();
-                        puzzle = puzzleIter.next();
+                        nextPuzzle();
                     }
                     generatorThread = null;
                 }
@@ -107,6 +109,34 @@ public class Main extends JPanel {
         repaint();
     }
     
+    public void nextPuzzle() {
+        if (puzzleIter != null && puzzleIter.hasNext()) {
+            puzzle = new PlayingPuzzle(puzzleIter.next());
+            controller.setPuzzle(puzzle);
+        } else {
+            regenerate(new Random().nextLong());
+        }
+    }
+    
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            System.exit(0);
+        } else if (e.getKeyCode() == KeyEvent.VK_F5) {
+            nextPuzzle();
+        } else {
+            controller.key(e.getKeyCode());
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
 
     // main -------------------------------------------------------------------
     public static void main(String[] args) {
@@ -117,22 +147,7 @@ public class Main extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         
-        frame.addKeyListener(new KeyAdapter() {
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-                    System.exit(0);
-                else if (e.getKeyCode() == KeyEvent.VK_F5) {
-                    if (panel.puzzleIter != null && panel.puzzleIter.hasNext()) {
-                        panel.puzzle = panel.puzzleIter.next();
-                    } else {
-                        panel.regenerate(new Random().nextLong());
-                    }
-                }
-            }
-
-        });
+        frame.addKeyListener(panel);
         
         frame.setVisible(true);
     }

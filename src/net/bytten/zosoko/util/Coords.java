@@ -88,6 +88,10 @@ public class Coords implements Comparable<Coords> {
         return Math.sqrt(dx*dx + dy*dy);
     }
     
+    public Coords add(int dx, int dy) {
+        return new Coords(x+dx, y+dy);
+    }
+    
     public String toString() {
         return x+","+y;
     }

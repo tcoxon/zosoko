@@ -101,10 +101,19 @@ public class PuzzleRenderer {
             g.translate(scale * (1 - bounds.left), scale * (1 - bounds.top));
             
             drawMap();
-            for (Coords xy: puzzle.getBoxStartPositions()) {
-                drawBox(xy);
+            
+            if (puzzle instanceof PlayingPuzzle) {
+                PlayingPuzzle ppuzzle = (PlayingPuzzle)puzzle;
+                for (Coords xy: ppuzzle.getBoxPositions()) {
+                    drawBox(xy);
+                }
+                drawPlayer(ppuzzle.getPlayerPosition());
+            } else {
+                for (Coords xy: puzzle.getBoxStartPositions()) {
+                    drawBox(xy);
+                }
+                drawPlayer(puzzle.getPlayerStartPosition());
             }
-            drawPlayer(puzzle.getPlayerStartPosition());
         }
         
         g.setTransform(origXfm);
