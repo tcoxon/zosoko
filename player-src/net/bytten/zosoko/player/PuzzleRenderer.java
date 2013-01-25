@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
 import net.bytten.zosoko.IPuzzle;
+import net.bytten.zosoko.Tile;
 import net.bytten.zosoko.util.Bounds;
 import net.bytten.zosoko.util.Coords;
 
@@ -30,7 +31,7 @@ public class PuzzleRenderer {
         g.drawString("GOAL", (int)scale/2, (int)scale/2);
     }
     
-    private void drawTile(IPuzzle.Tile tile, int x, int y) {
+    private void drawTile(Tile tile, int x, int y) {
         AffineTransform origXfm = g.getTransform();
         g.translate((int)(x * scale), (int)(y * scale));
         switch (tile) {

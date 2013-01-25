@@ -2,7 +2,7 @@ package net.bytten.zosoko.player;
 
 import java.awt.event.KeyEvent;
 
-import net.bytten.zosoko.IPuzzle;
+import net.bytten.zosoko.Tile;
 import net.bytten.zosoko.util.Coords;
 
 public class PuzzleController {
@@ -17,13 +17,17 @@ public class PuzzleController {
         this.puzzle = puzzle;
     }
     
+    private boolean insideMap(Coords pos) {
+        return !(pos.x < 0 || pos.y < 0 ||
+                pos.x >= puzzle.getSize().width() ||
+                pos.y >= puzzle.getSize().height());
+    }
+    
     private boolean validPlayerPos(Coords pos) {
-        if (puzzle.get(pos.x, pos.y) == IPuzzle.Tile.WALL)
+        if (insideMap(pos) && puzzle.get(pos.x, pos.y) == Tile.WALL)
             return false;
         if (puzzle.isBounded()) {
-            return !(pos.x < 0 || pos.y < 0 ||
-                    pos.x >= puzzle.getSize().width() ||
-                    pos.y >= puzzle.getSize().height());
+            return insideMap(pos);
         } else {
             return !(pos.x < -1 || pos.y < -1 ||
                     pos.x > puzzle.getSize().width() ||

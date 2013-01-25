@@ -1,6 +1,8 @@
-package net.bytten.zosoko;
+package net.bytten.zosoko.generator;
 
 import java.util.Collection;
+
+import net.bytten.zosoko.IPuzzle;
 
 public interface IPuzzleGenerator {
 

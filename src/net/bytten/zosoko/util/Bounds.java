@@ -51,4 +51,9 @@ public class Bounds {
     public String toString() {
         return "Bounds("+left+","+top+","+right+","+bottom+")";
     }
+
+    public boolean contains(Coords pos) {
+        return pos.x >= left && pos.y >= top &&
+                pos.x <= right && pos.y <= bottom;
+    }
 }

@@ -7,10 +7,6 @@ import net.bytten.zosoko.util.Coords;
 
 public interface IPuzzle {
     
-    enum Tile {
-        FLOOR, WALL, GOAL
-    }
-    
     public List<Coords> getBoxStartPositions();
     public Coords getPlayerStartPosition();
     

@@ -17,8 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import net.bytten.zosoko.IPuzzle;
-import net.bytten.zosoko.IPuzzleGenerator;
-import net.bytten.zosoko.TestPuzzleGenerator;
+import net.bytten.zosoko.generator.IPuzzleGenerator;
+import net.bytten.zosoko.generator.PuzzleGenerator;
 
 
 public class Main extends JPanel implements KeyListener {
@@ -57,7 +57,15 @@ public class Main extends JPanel implements KeyListener {
     
     protected IPuzzleGenerator makePuzzleGenerator(long seed) {
         // control generator with getArg()
-        return new TestPuzzleGenerator(getArg("unbounded") == null);
+        int width = getIntArg("width", 4), //2),
+            height = getIntArg("height", 4), //1),
+            boxes = getIntArg("boxes", 2);
+        System.out.println("Puzzle seed: "+seed);
+        return new PuzzleGenerator(
+                new Random(seed),
+                width, height, boxes,
+                getArg("unbounded") == null);
+        //return new TestPuzzleGenerator(getArg("unbounded") == null);
     }
     
     public void regenerate(final long seed) {
@@ -173,6 +181,21 @@ public class Main extends JPanel implements KeyListener {
             }
         }
         return null;
+    }
+    
+    private int getIntArg(String arg, int defaultVal) {
+        return getIntArg(arg, defaultVal, args);
+    }
+    
+    private static int getIntArg(String arg, int defaultVal, String[] args) {
+        String strval = getArg(arg, args);
+        if (strval == null) return defaultVal;
+        try {
+            return Integer.parseInt(strval);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return defaultVal;
+        }
     }
 
     private static long getSeed(String[] args) {
