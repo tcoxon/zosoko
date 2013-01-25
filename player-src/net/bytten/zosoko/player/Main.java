@@ -56,8 +56,8 @@ public class Main extends JPanel implements KeyListener {
     }
     
     protected IPuzzleGenerator makePuzzleGenerator(long seed) {
-        // TODO control generator with getArg()
-        return new TestPuzzleGenerator();
+        // control generator with getArg()
+        return new TestPuzzleGenerator(getArg("unbounded") == null);
     }
     
     public void regenerate(final long seed) {
@@ -167,10 +167,7 @@ public class Main extends JPanel implements KeyListener {
     private static String getArg(String arg, String[] args) {
         for (int i = 0; i < args.length; ++i) {
             if (args[i].equals("-"+arg)) {
-                ++i;
-                if (i < args.length) {
-                    return args[i];
-                }
+                return args[i];
             } else if (args[i].startsWith("-"+arg+"=")) {
                 return args[i].substring(2 + arg.length());
             }

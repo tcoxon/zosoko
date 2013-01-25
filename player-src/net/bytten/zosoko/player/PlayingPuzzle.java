@@ -51,4 +51,9 @@ public class PlayingPuzzle implements IPuzzle {
         return boxPositions;
     }
 
+    @Override
+    public boolean isBounded() {
+        return puzzle.isBounded();
+    }
+
 }

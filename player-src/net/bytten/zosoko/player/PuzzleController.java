@@ -17,17 +17,25 @@ public class PuzzleController {
         this.puzzle = puzzle;
     }
     
+    private boolean validPlayerPos(Coords pos) {
+        if (puzzle.get(pos.x, pos.y) == IPuzzle.Tile.WALL)
+            return false;
+        if (puzzle.isBounded()) {
+            return !(pos.x < 0 || pos.y < 0 ||
+                    pos.x >= puzzle.getSize().width() ||
+                    pos.y >= puzzle.getSize().height());
+        } else {
+            return !(pos.x < -1 || pos.y < -1 ||
+                    pos.x > puzzle.getSize().width() ||
+                    pos.y > puzzle.getSize().height());
+        }
+    }
+    
     private void move(int dx, int dy) {
         Coords pos = puzzle.getPlayerPosition(),
                newPos = pos.add(dx,dy);
         
-        if (newPos.x < 0 || newPos.y < 0 ||
-                newPos.x >= puzzle.getSize().width() ||
-                newPos.y >= puzzle.getSize().height()) {
-            return;
-        }
-        
-        if (puzzle.get(newPos.x, newPos.y) == IPuzzle.Tile.WALL)
+        if (!validPlayerPos(newPos))
             return;
         
         puzzle.setPlayerPosition(newPos);

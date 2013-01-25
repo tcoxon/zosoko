@@ -17,4 +17,8 @@ public interface IPuzzle {
     public Bounds getSize();
     public Tile get(int x, int y);
     
+    // An unbounded puzzle allows the player (but not blocks) to move outside
+    // of the grid area
+    public boolean isBounded();
+    
 }

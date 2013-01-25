@@ -9,7 +9,7 @@ import net.bytten.zosoko.util.Coords;
 
 public class TestPuzzleGenerator implements IPuzzleGenerator {
 
-    protected static class TestPuzzle implements IPuzzle {
+    protected class TestPuzzle implements IPuzzle {
 
         /* Test Puzzle 6x3
          * ########
@@ -44,10 +44,24 @@ public class TestPuzzleGenerator implements IPuzzleGenerator {
             if (x == 5 && y == 2) return Tile.GOAL;
             return Tile.FLOOR;
         }
+
+        @Override
+        public boolean isBounded() {
+            return bounded;
+        }
         
     }
     
+    protected boolean bounded;
     protected List<IPuzzle> puzzles;
+    
+    public TestPuzzleGenerator(boolean bounded) {
+        this.bounded = bounded;
+    }
+    
+    public TestPuzzleGenerator() {
+        this(true);
+    }
     
     @Override
     public void generate() {
