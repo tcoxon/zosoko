@@ -31,7 +31,6 @@ public class Main extends JPanel implements KeyListener {
     protected IPuzzleGenerator puzzleGen;
     protected PlayingPuzzle puzzle;
     protected PuzzleController controller;
-    protected Iterator<IPuzzle> puzzleIter;
     protected PuzzleRenderer puzzleRenderer;
     
     protected Thread generatorThread;
@@ -57,8 +56,8 @@ public class Main extends JPanel implements KeyListener {
     
     protected IPuzzleGenerator makePuzzleGenerator(long seed) {
         // control generator with getArg()
-        int width = getIntArg("width", 4), //2),
-            height = getIntArg("height", 4), //1),
+        int width = getIntArg("width", 3),
+            height = getIntArg("height", 2),
             boxes = getIntArg("boxes", 2);
         System.out.println("Puzzle seed: "+seed);
         return new PuzzleGenerator(
@@ -123,8 +122,8 @@ public class Main extends JPanel implements KeyListener {
             this.puzzle = null;
         } else {
             this.puzzle = new PlayingPuzzle(puzzle);
+            controller.setPuzzle(this.puzzle);
         }
-        controller.setPuzzle(this.puzzle);
     }
     
 

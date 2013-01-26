@@ -88,11 +88,16 @@ public class PuzzleGenerator implements IPuzzleGenerator {
         
         return true;
     }
+    
+    private static class RetryException extends Exception {
+        private static final long serialVersionUID = 1L;
+    }
 
-    private void fillTemplateMap() {
+    private void fillTemplateMap() throws RetryException {
         for (int x = 0; x < width; ++x)
         for (int y = 0; y < height; ++y) {
-            while (true) {
+            int attempts = 0;
+            while (++attempts < 20) {
                 Template template = Template.values()[
                         rand.nextInt(Template.values().length)];
                 TemplateTransform transform = new TemplateTransform(rand);
@@ -101,14 +106,26 @@ public class PuzzleGenerator implements IPuzzleGenerator {
                     break;
                 }
             }
+            if (attempts >= 20) throw new RetryException();
         }
     }
     
     @Override
     public void generate() {
-        templateMap = new TemplateMap(width, height);
-        puzzle = new TemplatePuzzle(templateMap);
-        fillTemplateMap();
+        int attempts = 0;
+        while (attempts < 20) {
+            try {
+        
+                templateMap = new TemplateMap(width, height);
+                puzzle = new TemplatePuzzle(templateMap);
+                fillTemplateMap();
+                return;
+                
+            } catch (RetryException e) {
+                ++attempts;
+                assert attempts < 20;
+            }
+        }
     }
 
     @Override
