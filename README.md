@@ -9,6 +9,7 @@ Sōkoban puzzle generator
 * -boxes=N Sets the number of boxes and goals in generated puzzles.
 * -unbounded Allow the player to walk around outside the bounds of the puzzle.
 * -test Always generates the puzzle designed for testing the renderer and controller.
+* -limit-goal-experiments=N Limit the number of combinations of goals the generator tries for each map.
 
 
 ## TODO

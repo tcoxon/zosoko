@@ -9,8 +9,9 @@ import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.zosoko.util.Bounds;
 import net.bytten.zosoko.util.Coords;
+import net.bytten.zosoko.util.ILogger;
 
-public class PuzzleGenerator implements IPuzzleGenerator {
+public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
     
     protected class MappedPuzzle implements IPuzzle {
         
@@ -63,6 +64,7 @@ public class PuzzleGenerator implements IPuzzleGenerator {
 
     int width, height, boxes;
     boolean bounded;
+    Integer goalAttemptLimit;
     
     TemplateMap templateMap;
     PuzzleMap puzzleMap;
@@ -71,6 +73,8 @@ public class PuzzleGenerator implements IPuzzleGenerator {
     
     TemplateMapFiller mapFiller;
     MapConstraints mapConstraints;
+    
+    ILogger logger;
     
     public PuzzleGenerator(Random rand, int width, int height, int boxes,
             boolean bounded) {
@@ -82,6 +86,20 @@ public class PuzzleGenerator implements IPuzzleGenerator {
         
         mapFiller = new TemplateMapFiller(rand);
         mapConstraints = new MapConstraints(bounded, boxes);
+    }
+    
+    // null => no limit
+    public void setGoalAttemptLimit(Integer val) {
+        goalAttemptLimit = val;
+    }
+    
+    public void setLogger(ILogger logger) {
+        this.logger = logger;
+    }
+    
+    protected int tryGoals(List<Coords> goals) {
+        // TODO find the farthest state from the goal and score it
+        return 1;
     }
     
     @Override
@@ -106,6 +124,34 @@ public class PuzzleGenerator implements IPuzzleGenerator {
                 // meet certain criteria.
                 mapConstraints.check(puzzleMap);
                 
+                GoalSupplier goalSupplier = new GoalSupplier(rand, boxes,
+                        puzzleMap, goalAttemptLimit, false);
+                int goalAttempts = 0;
+                int bestGoalScore = 0;
+                List<Coords> bestGoals = null;
+                while (goalSupplier.hasMore()) {
+                    List<Coords> goals = goalSupplier.next();
+                    
+                    for (Coords goal: goals) {
+                        puzzleMap.setTile(goal.x, goal.y, Tile.GOAL);
+                    }
+                    
+                    int score = tryGoals(goals);
+                    if (score > bestGoalScore) {
+                        bestGoals = goals;
+                    }
+                    
+                    for (Coords goal: goals) {
+                        puzzleMap.setTile(goal.x, goal.y, Tile.FLOOR);
+                    }
+                    
+                    ++goalAttempts;
+                }
+                log("Goal experiments: "+goalAttempts);
+                if (bestGoals == null)
+                    throw new RetryException();
+                
+                log("Full reattempts: "+attempts);
                 return;
                 
             } catch (RetryException e) {
@@ -118,6 +164,11 @@ public class PuzzleGenerator implements IPuzzleGenerator {
     @Override
     public IPuzzle getPuzzle() {
         return puzzle;
+    }
+
+    @Override
+    public void log(String msg) {
+        if (logger != null) logger.log(msg);
     }
 
 }

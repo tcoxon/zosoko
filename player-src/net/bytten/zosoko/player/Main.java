@@ -19,6 +19,7 @@ import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.generator.IPuzzleGenerator;
 import net.bytten.zosoko.generator.PuzzleGenerator;
 import net.bytten.zosoko.generator.TestPuzzleGenerator;
+import net.bytten.zosoko.util.StdoutLogger;
 
 
 public class Main extends JPanel implements KeyListener {
@@ -61,10 +62,18 @@ public class Main extends JPanel implements KeyListener {
                 height = getIntArg("height", 3),
                 boxes = getIntArg("boxes", 2);
             System.out.println("Puzzle seed: "+seed);
-            return new PuzzleGenerator(
+            PuzzleGenerator gen = new PuzzleGenerator(
                     new Random(seed),
                     width, height, boxes,
                     getArg("unbounded") == null);
+            gen.setLogger(new StdoutLogger());
+            
+            int goalAttemptLimit = getIntArg("limit-goal-experiments", 0);
+            if (goalAttemptLimit != 0) {
+                gen.setGoalAttemptLimit(goalAttemptLimit);
+            }
+            
+            return gen;
         } else {
             return new TestPuzzleGenerator(getArg("unbounded") == null);
         }

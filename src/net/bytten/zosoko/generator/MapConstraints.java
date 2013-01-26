@@ -21,17 +21,6 @@ public class MapConstraints {
         this.boxes = boxes;
     }
     
-    protected Set<Coords> getFloorTiles(IPuzzleMap map) {
-        Set<Coords> floors = new TreeSet<Coords>();
-        
-        for (int x = 0; x < map.getWidth(); ++x)
-            for (int y = 0; y < map.getHeight(); ++y)
-                if (map.getTile(x,y) == Tile.FLOOR)
-                    floors.add(new Coords(x,y));
-        
-        return floors;
-    }
-    
     protected void checkConnectivity(IPuzzleMap map, Set<Coords> floorTiles)
             throws RetryException {
         // The map should have one contiguous space of floor 
@@ -146,7 +135,8 @@ public class MapConstraints {
     
     public void check(IPuzzleMap map)
             throws RetryException {
-        Set<Coords> floorTiles = getFloorTiles(map);
+        Set<Coords> floorTiles = new TreeSet<Coords>(
+                PuzzleMap.getFloorTiles(map));
         checkEnoughSpaces(floorTiles);
         checkConnectivity(map, floorTiles);
         checkOpenSpaces(floorTiles);

@@ -1,8 +1,12 @@
 package net.bytten.zosoko.generator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.zosoko.util.Bounds;
+import net.bytten.zosoko.util.Coords;
 
 public class PuzzleMap implements IPuzzleMap {
 
@@ -47,4 +51,15 @@ public class PuzzleMap implements IPuzzleMap {
         return height;
     }
 
+    public static List<Coords> getFloorTiles(IPuzzleMap map) {
+        List<Coords> floors = new ArrayList<Coords>();
+        
+        for (int x = 0; x < map.getWidth(); ++x)
+            for (int y = 0; y < map.getHeight(); ++y)
+                if (map.getTile(x,y) == Tile.FLOOR)
+                    floors.add(new Coords(x,y));
+        
+        return floors;
+    }
+    
 }
