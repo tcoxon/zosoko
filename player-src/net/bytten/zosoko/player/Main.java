@@ -74,9 +74,9 @@ public class Main extends JPanel implements KeyListener {
                 public void run() {
                     puzzleGen = makePuzzleGenerator(seed);
                     if (puzzleGen != null) {
+                        setPuzzle(null);
                         puzzleGen.generate();
-                        puzzleIter = puzzleGen.getPuzzleSet().iterator();
-                        nextPuzzle();
+                        setPuzzle(puzzleGen.getPuzzle());
                     }
                     generatorThread = null;
                 }
@@ -93,7 +93,8 @@ public class Main extends JPanel implements KeyListener {
         bufferG.fillRect(0, 0, bufferDim.width, bufferDim.height);
         
         if (puzzle != null) {
-            puzzleRenderer.draw(bufferG, bufferDim, puzzle);
+            puzzleRenderer.draw(bufferG, bufferDim,
+                    puzzle == null ? puzzleGen.getPuzzle() : puzzle);
         }
         
         // Double-buffered drawing
@@ -117,13 +118,13 @@ public class Main extends JPanel implements KeyListener {
         repaint();
     }
     
-    public void nextPuzzle() {
-        if (puzzleIter != null && puzzleIter.hasNext()) {
-            puzzle = new PlayingPuzzle(puzzleIter.next());
-            controller.setPuzzle(puzzle);
+    public void setPuzzle(IPuzzle puzzle) {
+        if (puzzle == null) {
+            this.puzzle = null;
         } else {
-            regenerate(new Random().nextLong());
+            this.puzzle = new PlayingPuzzle(puzzle);
         }
+        controller.setPuzzle(this.puzzle);
     }
     
 
@@ -132,7 +133,7 @@ public class Main extends JPanel implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             System.exit(0);
         } else if (e.getKeyCode() == KeyEvent.VK_F5) {
-            nextPuzzle();
+            regenerate(new Random().nextLong());
         } else {
             controller.key(e.getKeyCode());
         }

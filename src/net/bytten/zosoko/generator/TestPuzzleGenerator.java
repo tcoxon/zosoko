@@ -1,7 +1,6 @@
 package net.bytten.zosoko.generator;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import net.bytten.zosoko.IPuzzle;
@@ -55,7 +54,7 @@ public class TestPuzzleGenerator implements IPuzzleGenerator {
     }
     
     protected boolean bounded;
-    protected List<IPuzzle> puzzles;
+    protected IPuzzle puzzle;
     
     public TestPuzzleGenerator(boolean bounded) {
         this.bounded = bounded;
@@ -67,13 +66,12 @@ public class TestPuzzleGenerator implements IPuzzleGenerator {
     
     @Override
     public void generate() {
-        puzzles = new ArrayList<IPuzzle>(1);
-        puzzles.add(new TestPuzzle());
+        puzzle = new TestPuzzle();
     }
 
     @Override
-    public Collection<IPuzzle> getPuzzleSet() {
-        return puzzles;
+    public IPuzzle getPuzzle() {
+        return puzzle;
     }
 
 }

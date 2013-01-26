@@ -1,7 +1,6 @@
 package net.bytten.zosoko.generator;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -62,17 +61,43 @@ public class PuzzleGenerator implements IPuzzleGenerator {
         this.boxes = boxes;
         this.bounded = bounded;
     }
+    
+    private boolean templateFits(Template template, TemplateTransform transform,
+            int x, int y) {
+        if (!template.check(templateMap, transform, new Coords(x,y)))
+            return false;
+        // check the neighbors already placed fit with this template...
+        if (x > 0) {
+            Template tpl = templateMap.getTemplate(x-1, y);
+            TemplateTransform xfm = templateMap.getTransform(x-1, y);
+            if (!tpl.check(templateMap, xfm, new Coords(x-1, y)))
+                return false;
+        }
+        if (y > 0) {
+            Template tpl = templateMap.getTemplate(x, y-1);
+            TemplateTransform xfm = templateMap.getTransform(x, y-1);
+            if (!tpl.check(templateMap, xfm, new Coords(x, y-1)))
+                return false;
+        }
+        if (x > 0 && y > 0) {
+            Template tpl = templateMap.getTemplate(x-1, y-1);
+            TemplateTransform xfm = templateMap.getTransform(x-1, y-1);
+            if (!tpl.check(templateMap, xfm, new Coords(x-1, y-1)))
+                return false;
+        }
+        
+        return true;
+    }
 
-    private void generateTemplateMap() {
-        templateMap = new TemplateMap(width, height);
+    private void fillTemplateMap() {
         for (int x = 0; x < width; ++x)
         for (int y = 0; y < height; ++y) {
             while (true) {
                 Template template = Template.values()[
                         rand.nextInt(Template.values().length)];
                 TemplateTransform transform = new TemplateTransform(rand);
-                if (template.check(templateMap, transform, new Coords(x,y))) {
-                    templateMap.put(x, y, template, transform);
+                templateMap.put(x, y, template, transform);
+                if (templateFits(template, transform, x, y)) {
                     break;
                 }
             }
@@ -81,16 +106,14 @@ public class PuzzleGenerator implements IPuzzleGenerator {
     
     @Override
     public void generate() {
-        generateTemplateMap();
+        templateMap = new TemplateMap(width, height);
         puzzle = new TemplatePuzzle(templateMap);
+        fillTemplateMap();
     }
 
     @Override
-    public Collection<IPuzzle> getPuzzleSet() {
-        List<IPuzzle> puzzles = new ArrayList<IPuzzle>(1);
-        if (puzzle != null)
-            puzzles.add(puzzle);
-        return puzzles;
+    public IPuzzle getPuzzle() {
+        return puzzle;
     }
 
 }

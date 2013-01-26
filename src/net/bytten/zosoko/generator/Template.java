@@ -191,7 +191,11 @@ public enum Template {
     }
     
     private static Tile[][] mktiles(Tile[]... rows) {
-        return rows;
+        Tile[][] result = new Tile[rows[0].length][rows.length];
+        for (int x = 0; x < rows.length; ++x)
+            for (int y = 0; y < rows[x].length; ++y)
+                result[y][x] = rows[x][y];
+        return result;
     }
     
     private static Require mkreq(int dx, int dy, int sx, int sy,

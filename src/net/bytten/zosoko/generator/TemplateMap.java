@@ -19,11 +19,19 @@ public class TemplateMap {
     }
     
     Template getTemplate(Coords pos) {
-        return templates[pos.x][pos.y];
+        return getTemplate(pos.x, pos.y);
+    }
+    
+    Template getTemplate(int x, int y) {
+        return templates[x][y];
     }
     
     TemplateTransform getTransform(Coords pos) {
-        return transforms[pos.x][pos.y];
+        return getTransform(pos.x, pos.y);
+    }
+    
+    TemplateTransform getTransform (int x, int y) {
+        return transforms[x][y];
     }
     
     public Bounds getSize() {
