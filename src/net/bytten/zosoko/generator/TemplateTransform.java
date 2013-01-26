@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.bytten.zosoko.util.Coords;
 
+// FIXME This is a mess. Replace with matrix math please
 public class TemplateTransform {
     
     private final boolean flip;
@@ -13,7 +14,6 @@ public class TemplateTransform {
         this.flip = flip;
         this.rot = rot;
         assert rot >= 0 && rot < 4;
-        // TODO investigate whether matrix math is faster here
     }
     
     public TemplateTransform(Random r) {
@@ -36,8 +36,32 @@ public class TemplateTransform {
         }
     }
     
+    public Coords unapply(Coords xy) {
+        switch (rot) {
+        default:
+            assert false;
+        case 0:
+            break;
+        case 1:
+            xy = new Coords(xy.y, -xy.x);
+            break;
+        case 2:
+            xy = new Coords(-xy.x, -xy.y);
+            break;
+        case 3:
+            xy = new Coords(-xy.y, xy.x);
+            break;
+        }
+        if (flip) xy = new Coords(-xy.x, xy.y);
+        return xy;
+    }
+    
     public Coords applyTile(Coords xy) {
         return apply(xy.add(-1,-1)).add(1,1);
+    }
+
+    public Coords unapplyTile(Coords xy) {
+        return unapply(xy.add(-1,-1)).add(1,1);
     }
 
 }

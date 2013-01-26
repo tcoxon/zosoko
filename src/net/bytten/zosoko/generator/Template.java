@@ -168,12 +168,13 @@ public enum Template {
     
     public boolean check(TemplateMap map, TemplateTransform xfm, Coords index) {
         for (Require req: reqs) {
-            Coords neighborPos = index.add(xfm.apply(req.d));
+            Coords neighborPos = index.add(xfm.unapply(req.d));
             if (!map.getSize().contains(neighborPos)) return false;
             Template neighbor = map.getTemplate(neighborPos);
             if (neighbor == null) continue;
             
-            Coords tilePos = map.getTransform(neighborPos).applyTile(req.s);
+            Coords tilePos = map.getTransform(neighborPos).applyTile(
+                    xfm.unapplyTile(req.s));
             if (neighbor.tiles[tilePos.x][tilePos.y] != req.mustBe)
                 return false;
         }
