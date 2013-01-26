@@ -99,6 +99,11 @@ public class PuzzleRenderer {
         
         g.setTransform(origXfm);
     }
+    
+    private void drawWin() {
+        g.setColor(Color.RED);
+        g.drawString("WIN!", -(int)scale/2, -(int)scale/2);
+    }
 
     public void draw(Graphics2D g, Dimension dim, IPuzzle puzzle) {
         this.g = g;
@@ -123,6 +128,10 @@ public class PuzzleRenderer {
                     drawBox(xy);
                 }
                 drawPlayer(ppuzzle.getPlayerPosition());
+                
+                if (((PlayingPuzzle)puzzle).isWon()) {
+                    drawWin();
+                }
             } else {
                 for (Coords xy: puzzle.getBoxStartPositions()) {
                     drawBox(xy);

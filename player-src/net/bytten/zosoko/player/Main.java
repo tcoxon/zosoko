@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.generator.IPuzzleGenerator;
 import net.bytten.zosoko.generator.PuzzleGenerator;
+import net.bytten.zosoko.generator.TestPuzzleGenerator;
 
 
 public class Main extends JPanel implements KeyListener {
@@ -55,15 +56,18 @@ public class Main extends JPanel implements KeyListener {
     
     protected IPuzzleGenerator makePuzzleGenerator(long seed) {
         // control generator with getArg()
-        int width = getIntArg("width", 6),
-            height = getIntArg("height", 3),
-            boxes = getIntArg("boxes", 2);
-        System.out.println("Puzzle seed: "+seed);
-        return new PuzzleGenerator(
-                new Random(seed),
-                width, height, boxes,
-                getArg("unbounded") == null);
-        //return new TestPuzzleGenerator(getArg("unbounded") == null);
+        if (getArg("test") == null) {
+            int width = getIntArg("width", 6),
+                height = getIntArg("height", 3),
+                boxes = getIntArg("boxes", 2);
+            System.out.println("Puzzle seed: "+seed);
+            return new PuzzleGenerator(
+                    new Random(seed),
+                    width, height, boxes,
+                    getArg("unbounded") == null);
+        } else {
+            return new TestPuzzleGenerator(getArg("unbounded") == null);
+        }
     }
     
     public void regenerate(final long seed) {

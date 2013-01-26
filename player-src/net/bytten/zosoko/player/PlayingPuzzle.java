@@ -66,5 +66,14 @@ public class PlayingPuzzle implements IPuzzle {
     public int getHeight() {
         return puzzle.getHeight();
     }
+    
+    public boolean isWon() {
+        // The puzzle is won when all boxes are on goal tiles
+        for (Coords box: boxPositions) {
+            if (puzzle.getTile(box.x, box.y) != Tile.GOAL)
+                return false;
+        }
+        return true;
+    }
 
 }

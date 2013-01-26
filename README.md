@@ -8,6 +8,7 @@ Sōkoban puzzle generator
 * -height=H Sets the height of generated puzzles. Must be a multiple of 3.
 * -boxes=N Sets the number of boxes and goals in generated puzzles.
 * -unbounded Allow the player to walk around outside the bounds of the puzzle.
+* -test Always generates the puzzle designed for testing the renderer and controller.
 
 
 ## TODO

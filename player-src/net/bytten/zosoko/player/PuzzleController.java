@@ -1,6 +1,7 @@
 package net.bytten.zosoko.player;
 
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import net.bytten.zosoko.Tile;
 import net.bytten.zosoko.util.Coords;
@@ -35,12 +36,34 @@ public class PuzzleController {
         }
     }
     
+    private boolean tryMoveBox(int box, int dx, int dy) {
+        Coords pos = puzzle.getBoxPositions().get(box),
+               newPos = pos.add(dx, dy);
+        
+        if (!insideMap(newPos) ||
+                puzzle.getTile(newPos.x, newPos.y) == Tile.WALL ||
+                puzzle.getBoxPositions().contains(newPos))
+            return false;
+        
+        puzzle.getBoxPositions().set(box, newPos);
+        return true;
+    }
+    
     private void move(int dx, int dy) {
         Coords pos = puzzle.getPlayerPosition(),
                newPos = pos.add(dx,dy);
         
         if (!validPlayerPos(newPos))
             return;
+        
+        List<Coords> boxes = puzzle.getBoxPositions();
+        for (int box = 0; box < boxes.size(); ++box) {
+            if (boxes.get(box).equals(newPos)) {
+                if (!tryMoveBox(box, dx, dy))
+                    // The box is blocked; player cannot move it
+                    return;
+            }
+        }
         
         puzzle.setPlayerPosition(newPos);
     }
