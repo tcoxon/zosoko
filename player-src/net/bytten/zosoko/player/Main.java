@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -56,8 +55,8 @@ public class Main extends JPanel implements KeyListener {
     
     protected IPuzzleGenerator makePuzzleGenerator(long seed) {
         // control generator with getArg()
-        int width = getIntArg("width", 3),
-            height = getIntArg("height", 2),
+        int width = getIntArg("width", 6),
+            height = getIntArg("height", 3),
             boxes = getIntArg("boxes", 2);
         System.out.println("Puzzle seed: "+seed);
         return new PuzzleGenerator(

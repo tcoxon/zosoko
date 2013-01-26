@@ -21,7 +21,7 @@ public class TestPuzzleGenerator implements IPuzzleGenerator {
          */
         
         @Override
-        public Bounds getSize() {
+        public Bounds getBounds() {
             return new Bounds(6,3);
         }
 
@@ -39,7 +39,7 @@ public class TestPuzzleGenerator implements IPuzzleGenerator {
         }
 
         @Override
-        public Tile get(int x, int y) {
+        public Tile getTile(int x, int y) {
             if (x == 1 && y == 0) return Tile.GOAL;
             if (x == 4 && y == 1) return Tile.WALL;
             if (x == 5 && y == 2) return Tile.GOAL;
@@ -47,8 +47,18 @@ public class TestPuzzleGenerator implements IPuzzleGenerator {
         }
 
         @Override
-        public boolean isBounded() {
+        public boolean isPlayerBounded() {
             return bounded;
+        }
+
+        @Override
+        public int getWidth() {
+            return 6;
+        }
+
+        @Override
+        public int getHeight() {
+            return 3;
         }
         
     }

@@ -51,7 +51,7 @@ public class PuzzleRenderer {
     private void drawMap() {
         for (int x = 0; x < bounds.width(); ++x)
         for (int y = 0; y < bounds.height(); ++y) {
-            drawTile(puzzle.get(x,y), x,y);
+            drawTile(puzzle.getTile(x,y), x,y);
         }
         
         g.setColor(Color.LIGHT_GRAY);
@@ -95,7 +95,7 @@ public class PuzzleRenderer {
         
         // Figure out scale & translation to draw the dungeon at
         synchronized (puzzle) {
-            bounds = puzzle.getSize();
+            bounds = puzzle.getBounds();
             scale = Math.min(((double)dim.width) / (bounds.width() + 2),
                     ((double)dim.height) / (bounds.height() + 2));
             // move the graph into view

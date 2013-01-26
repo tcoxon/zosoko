@@ -169,7 +169,7 @@ public enum Template {
     public boolean check(TemplateMap map, TemplateTransform xfm, Coords index) {
         for (Require req: reqs) {
             Coords neighborPos = index.add(xfm.unapply(req.d));
-            if (!map.getSize().contains(neighborPos)) return false;
+            if (!map.containsTemplate(neighborPos)) return false;
             Template neighbor = map.getTemplate(neighborPos);
             if (neighbor == null) continue;
             

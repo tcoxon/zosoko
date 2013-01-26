@@ -1,10 +1,11 @@
 package net.bytten.zosoko.generator;
 
+import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.zosoko.util.Bounds;
 import net.bytten.zosoko.util.Coords;
 
-public class TemplateMap {
+public class TemplateMap implements IPuzzleMap {
     
     int width, height;
     Template[][] templates;
@@ -14,8 +15,15 @@ public class TemplateMap {
         this.width = width;
         this.height = height;
         
-        templates = new Template[width][height];
-        transforms = new TemplateTransform[width][height];
+        int tplCols = (width+2) / 3,
+            tplRows = (height+2) / 3;
+        templates = new Template[tplCols][tplRows];
+        transforms = new TemplateTransform[tplCols][tplRows];
+    }
+    
+    boolean containsTemplate(Coords pos) {
+        return pos.x >= 0 && pos.x < templates.length && pos.y >= 0 &&
+                pos.y < templates[0].length;
     }
     
     Template getTemplate(Coords pos) {
@@ -34,7 +42,7 @@ public class TemplateMap {
         return transforms[x][y];
     }
     
-    public Bounds getSize() {
+    public Bounds getBounds() {
         return new Bounds(width, height);
     }
     
@@ -46,6 +54,7 @@ public class TemplateMap {
         return height;
     }
     
+    @Override
     public Tile getTile(int x, int y) {
         int tplX = x / 3,
             tplY = y / 3;
@@ -66,5 +75,5 @@ public class TemplateMap {
         templates[x][y] = template;
         transforms[x][y] = transform;
     }
-    
+
 }

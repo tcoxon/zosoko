@@ -31,13 +31,13 @@ public class PlayingPuzzle implements IPuzzle {
     }
 
     @Override
-    public Bounds getSize() {
-        return puzzle.getSize();
+    public Bounds getBounds() {
+        return puzzle.getBounds();
     }
 
     @Override
-    public Tile get(int x, int y) {
-        return puzzle.get(x, y);
+    public Tile getTile(int x, int y) {
+        return puzzle.getTile(x, y);
     }
 
     public Coords getPlayerPosition() {
@@ -53,8 +53,18 @@ public class PlayingPuzzle implements IPuzzle {
     }
 
     @Override
-    public boolean isBounded() {
-        return puzzle.isBounded();
+    public boolean isPlayerBounded() {
+        return puzzle.isPlayerBounded();
+    }
+
+    @Override
+    public int getWidth() {
+        return puzzle.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return puzzle.getHeight();
     }
 
 }

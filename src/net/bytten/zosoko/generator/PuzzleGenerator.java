@@ -5,17 +5,18 @@ import java.util.List;
 import java.util.Random;
 
 import net.bytten.zosoko.IPuzzle;
+import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.zosoko.util.Bounds;
 import net.bytten.zosoko.util.Coords;
 
 public class PuzzleGenerator implements IPuzzleGenerator {
     
-    private class TemplatePuzzle implements IPuzzle {
+    protected class MappedPuzzle implements IPuzzle {
         
-        final TemplateMap map;
+        IPuzzleMap map;
 
-        public TemplatePuzzle(TemplateMap map) {
+        public MappedPuzzle(IPuzzleMap map) {
             this.map = map;
         }
         
@@ -30,18 +31,32 @@ public class PuzzleGenerator implements IPuzzleGenerator {
         }
 
         @Override
-        public Bounds getSize() {
-            return new Bounds(map.getWidth()*3, map.getHeight()*3);
+        public Bounds getBounds() {
+            return map.getBounds();
         }
 
         @Override
-        public Tile get(int x, int y) {
+        public Tile getTile(int x, int y) {
             return map.getTile(x, y);
         }
 
         @Override
-        public boolean isBounded() {
+        public boolean isPlayerBounded() {
             return bounded;
+        }
+
+        public void setMap(IPuzzleMap map) {
+            this.map = map;
+        }
+
+        @Override
+        public int getWidth() {
+            return map.getWidth();
+        }
+
+        @Override
+        public int getHeight() {
+            return map.getHeight();
         }
         
     }
@@ -50,6 +65,7 @@ public class PuzzleGenerator implements IPuzzleGenerator {
     boolean bounded;
     
     TemplateMap templateMap;
+    PuzzleMap puzzleMap;
     IPuzzle puzzle;
     Random rand;
     
@@ -62,7 +78,7 @@ public class PuzzleGenerator implements IPuzzleGenerator {
         this.bounded = bounded;
     }
     
-    private boolean templateFits(Template template, TemplateTransform transform,
+    protected boolean templateFits(Template template, TemplateTransform transform,
             int x, int y) {
         if (!template.check(templateMap, transform, new Coords(x,y)))
             return false;
@@ -89,13 +105,13 @@ public class PuzzleGenerator implements IPuzzleGenerator {
         return true;
     }
     
-    private static class RetryException extends Exception {
+    protected static class RetryException extends Exception {
         private static final long serialVersionUID = 1L;
     }
 
-    private void fillTemplateMap() throws RetryException {
-        for (int x = 0; x < width; ++x)
-        for (int y = 0; y < height; ++y) {
+    protected void fillTemplateMap() throws RetryException {
+        for (int x = 0; x < (width+2)/3; ++x)
+        for (int y = 0; y < (height+2)/3; ++y) {
             int attempts = 0;
             while (++attempts < 20) {
                 Template template = Template.values()[
@@ -110,20 +126,31 @@ public class PuzzleGenerator implements IPuzzleGenerator {
         }
     }
     
+    protected void checkMapConstraints() {
+        
+    }
+    
     @Override
     public void generate() {
         int attempts = 0;
-        while (attempts < 20) {
+        while (true) {
             try {
         
                 templateMap = new TemplateMap(width, height);
-                puzzle = new TemplatePuzzle(templateMap);
+                puzzle = new MappedPuzzle(templateMap);
                 fillTemplateMap();
+                
+                // Copy the current map into a more efficient-to-access
+                // structure
+                puzzleMap = new PuzzleMap(templateMap);
+                ((MappedPuzzle)puzzle).setMap(puzzleMap);
+                checkMapConstraints();
+                
                 return;
                 
             } catch (RetryException e) {
                 ++attempts;
-                assert attempts < 20;
+                assert attempts < 200;
             }
         }
     }
