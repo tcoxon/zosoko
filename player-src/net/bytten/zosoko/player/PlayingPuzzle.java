@@ -73,7 +73,7 @@ public class PlayingPuzzle implements IPuzzle {
             if (puzzle.getTile(box.x, box.y) != Tile.GOAL)
                 return false;
         }
-        return true;
+        return boxPositions.size() > 0;
     }
 
 }
