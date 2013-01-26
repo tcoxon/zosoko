@@ -3,12 +3,15 @@ package net.bytten.zosoko.generator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.zosoko.util.Bounds;
 import net.bytten.zosoko.util.Coords;
+import net.bytten.zosoko.util.Direction;
 
 public class PuzzleGenerator implements IPuzzleGenerator {
     
@@ -126,8 +129,65 @@ public class PuzzleGenerator implements IPuzzleGenerator {
         }
     }
     
-    protected void checkMapConstraints() {
+    protected Set<Coords> getFloorTiles(IPuzzleMap map) {
+        Set<Coords> floors = new TreeSet<Coords>();
         
+        for (int x = 0; x < map.getWidth(); ++x)
+            for (int y = 0; y < map.getHeight(); ++y)
+                if (map.getTile(x,y) == Tile.FLOOR)
+                    floors.add(new Coords(x,y));
+        
+        return floors;
+    }
+    
+    protected void checkConnectivity(IPuzzleMap map, Set<Coords> floorTiles)
+            throws RetryException {
+        
+        Bounds bounds = map.getBounds();
+        Set<Coords> unconnected = new TreeSet<Coords>(floorTiles);
+        List<Coords> queue = new ArrayList<Coords>();
+        
+        if (unconnected.size() == 0) throw new RetryException();
+        
+        queue.add(unconnected.iterator().next());
+        unconnected.remove(queue.get(0));
+        
+        while (!queue.isEmpty() && !unconnected.isEmpty()) {
+            Coords current = queue.remove(0);
+            
+            for (Direction d: Direction.values()) {
+                if (bounds.contains(current.add(d.x, d.y))) {
+                    Coords neighbor = current.add(d.x,d.y);
+                    if (map.getTile(neighbor.x, neighbor.y) == Tile.FLOOR &&
+                            unconnected.contains(neighbor)) {
+                        unconnected.remove(neighbor);
+                        queue.add(neighbor);
+                    }
+                }
+            }
+        }
+        
+        if (!unconnected.isEmpty()) throw new RetryException();
+    }
+    
+    protected void checkOpenSpaces(IPuzzleMap map) throws RetryException {
+        
+    }
+    
+    protected void checkEnoughSpaces(IPuzzleMap map) throws RetryException {
+        
+    }
+    
+    protected void checkSurroundedFloor(IPuzzleMap map) throws RetryException {
+        
+    }
+    
+    protected void checkMapConstraints() throws RetryException {
+        Set<Coords> floorTiles = getFloorTiles(puzzleMap);
+        checkConnectivity(puzzleMap, floorTiles);
+        checkOpenSpaces(puzzleMap);
+        checkEnoughSpaces(puzzleMap);
+        checkSurroundedFloor(puzzleMap);
     }
     
     @Override
@@ -144,6 +204,8 @@ public class PuzzleGenerator implements IPuzzleGenerator {
                 // structure
                 puzzleMap = new PuzzleMap(templateMap);
                 ((MappedPuzzle)puzzle).setMap(puzzleMap);
+                
+                // Will throw a RetryException if it fails
                 checkMapConstraints();
                 
                 return;
