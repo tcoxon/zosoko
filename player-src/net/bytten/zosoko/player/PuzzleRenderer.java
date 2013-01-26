@@ -19,6 +19,8 @@ public class PuzzleRenderer {
     private Bounds bounds;
     
     private void drawFloor() {
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, (int)scale+1, (int)scale+1);
     }
     
     private void drawWall() {
@@ -27,6 +29,8 @@ public class PuzzleRenderer {
     }
     
     private void drawGoal() {
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, (int)scale+1, (int)scale+1);
         g.setColor(Color.BLACK);
         g.drawString("GOAL", (int)scale/2, (int)scale/2);
     }
@@ -46,6 +50,15 @@ public class PuzzleRenderer {
             break;
         }
         g.setTransform(origXfm);
+    }
+    
+    private void drawBounds() {
+        if (puzzle.isPlayerBounded()) {
+            g.setColor(Color.DARK_GRAY);
+            g.fillRect(-(int)scale, -(int)scale,
+                    (int)(scale*(puzzle.getWidth()+2)),
+                    (int)(scale*(puzzle.getHeight()+2)));
+        }
     }
     
     private void drawMap() {
@@ -101,6 +114,7 @@ public class PuzzleRenderer {
             // move the graph into view
             g.translate(scale * (1 - bounds.left), scale * (1 - bounds.top));
             
+            drawBounds();
             drawMap();
             
             if (puzzle instanceof PlayingPuzzle) {
