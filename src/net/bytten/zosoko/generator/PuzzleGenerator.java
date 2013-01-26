@@ -142,7 +142,7 @@ public class PuzzleGenerator implements IPuzzleGenerator {
     
     protected void checkConnectivity(IPuzzleMap map, Set<Coords> floorTiles)
             throws RetryException {
-        
+        // The map should have one contiguous space of floor 
         Bounds bounds = map.getBounds();
         Set<Coords> unconnected = new TreeSet<Coords>(floorTiles);
         List<Coords> queue = new ArrayList<Coords>();
@@ -198,28 +198,52 @@ public class PuzzleGenerator implements IPuzzleGenerator {
         return true;
     }
     
-    protected void checkOpenSpaces(IPuzzleMap map, Set<Coords> floorTiles)
+    protected void checkOpenSpaces(Set<Coords> floorTiles)
             throws RetryException {
+        // Any map with a 3x4 or 4x3 space of open floor is discarded
         for (Coords xy: floorTiles) {
             if (startsOpenSpace(xy, floorTiles))
                 throw new RetryException();
         }
     }
     
-    protected void checkEnoughSpaces(IPuzzleMap map) throws RetryException {
-        
+    protected void checkEnoughSpaces(Set<Coords> floorTiles)
+            throws RetryException {
+        // The map must have enough space for the player, the planned number of
+        // boxes and goals and at least one empty space
+        if (floorTiles.size() < 2 + boxes*2)
+            throw new RetryException();
     }
     
     protected void checkSurroundedFloor(IPuzzleMap map) throws RetryException {
         
     }
     
+    protected void checkFloorOnEdge(IPuzzleMap map) throws RetryException {
+        // if the player is unbounded, the edge of the map must be reachable
+        for (int x = 0; x < map.getWidth(); ++x) {
+            if (map.getTile(x, 0) == Tile.FLOOR ||
+                    map.getTile(x, map.getHeight()-1) == Tile.FLOOR)
+                return;
+        }
+        
+        for (int y = 0; y < map.getHeight(); ++y) {
+            if (map.getTile(0, y) == Tile.FLOOR ||
+                    map.getTile(map.getWidth()-1, y) == Tile.FLOOR)
+                return;
+        }
+        
+        throw new RetryException();
+    }
+    
     protected void checkMapConstraints() throws RetryException {
         Set<Coords> floorTiles = getFloorTiles(puzzleMap);
+        checkEnoughSpaces(floorTiles);
         checkConnectivity(puzzleMap, floorTiles);
-        checkOpenSpaces(puzzleMap, floorTiles);
-        checkEnoughSpaces(puzzleMap);
+        checkOpenSpaces(floorTiles);
         checkSurroundedFloor(puzzleMap);
+        if (!bounded)
+            checkFloorOnEdge(puzzleMap);
     }
     
     @Override
