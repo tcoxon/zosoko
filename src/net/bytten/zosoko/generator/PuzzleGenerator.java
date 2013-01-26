@@ -215,8 +215,24 @@ public class PuzzleGenerator implements IPuzzleGenerator {
             throw new RetryException();
     }
     
-    protected void checkSurroundedFloor(IPuzzleMap map) throws RetryException {
-        
+    protected void checkSurroundedFloor(IPuzzleMap map, Set<Coords> floorTiles)
+            throws RetryException {
+        // if the map contains any floor tiles surrounded on three sides by
+        // walls, it is discarded
+        Bounds bounds = map.getBounds();
+        for (Coords xy: floorTiles) {
+            int walls = 0;
+            for (Direction d: Direction.values()) {
+                Coords neighbor = xy.add(d.x,d.y);
+                if (!bounds.contains(neighbor)) {
+                    ++walls;
+                } else if (map.getTile(neighbor.x, neighbor.y) == Tile.WALL) {
+                    ++walls;
+                }
+            }
+            if (walls >= 3)
+                throw new RetryException();
+        }
     }
     
     protected void checkFloorOnEdge(IPuzzleMap map) throws RetryException {
@@ -241,7 +257,7 @@ public class PuzzleGenerator implements IPuzzleGenerator {
         checkEnoughSpaces(floorTiles);
         checkConnectivity(puzzleMap, floorTiles);
         checkOpenSpaces(floorTiles);
-        checkSurroundedFloor(puzzleMap);
+        checkSurroundedFloor(puzzleMap, floorTiles);
         if (!bounded)
             checkFloorOnEdge(puzzleMap);
     }
