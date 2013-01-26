@@ -77,9 +77,9 @@ public enum Template {
             mkreq(1, 0, 0, 1, Tile.FLOOR)
     )),
     
-    J(mktiles( // TODO Template considered blocking
+    J(mktiles(
             mkrow(Tile.WALL,  Tile.FLOOR, Tile.WALL),
-            mkrow(Tile.WALL,  Tile.FLOOR, Tile.FLOOR),
+            mkrow(Tile.WALL,  Tile.ALT_FLOOR, Tile.FLOOR),
             mkrow(Tile.WALL,  Tile.WALL,  Tile.WALL)
     ), mkreqs(
             mkreq(0, -1, 1, 2, Tile.FLOOR),

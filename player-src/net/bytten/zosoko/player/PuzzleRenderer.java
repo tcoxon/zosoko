@@ -39,6 +39,7 @@ public class PuzzleRenderer {
         AffineTransform origXfm = g.getTransform();
         g.translate((int)(x * scale), (int)(y * scale));
         switch (tile) {
+        case ALT_FLOOR:
         case FLOOR:
             drawFloor();
             break;
