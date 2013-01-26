@@ -170,8 +170,40 @@ public class PuzzleGenerator implements IPuzzleGenerator {
         if (!unconnected.isEmpty()) throw new RetryException();
     }
     
-    protected void checkOpenSpaces(IPuzzleMap map) throws RetryException {
+    // Does the map contain a 4x3 or 3x4 space of floor tiles?
+    protected boolean startsOpenSpace(Coords topLeft, Set<Coords> floorTiles) {
+        for (int dx = 0; dx < 3; ++dx)
+        for (int dy = 0; dy < 3; ++dy) {
+            Coords xy = topLeft.add(dx,dy);
+            if (!floorTiles.contains(xy))
+                return false;
+        }
         
+        int dx = 3;
+        boolean clear = true;
+        for (int dy = 0; dy < 3; ++dy) {
+            Coords xy = topLeft.add(dx,dy);
+            if (!floorTiles.contains(xy))
+                clear = false;
+        }
+        if (clear) return true;
+        
+        int dy = 3;
+        for (dx = 0; dx < 3; ++dx) {
+            Coords xy = topLeft.add(dx,dy);
+            if (!floorTiles.contains(xy))
+                return false;
+        }
+        
+        return true;
+    }
+    
+    protected void checkOpenSpaces(IPuzzleMap map, Set<Coords> floorTiles)
+            throws RetryException {
+        for (Coords xy: floorTiles) {
+            if (startsOpenSpace(xy, floorTiles))
+                throw new RetryException();
+        }
     }
     
     protected void checkEnoughSpaces(IPuzzleMap map) throws RetryException {
@@ -185,7 +217,7 @@ public class PuzzleGenerator implements IPuzzleGenerator {
     protected void checkMapConstraints() throws RetryException {
         Set<Coords> floorTiles = getFloorTiles(puzzleMap);
         checkConnectivity(puzzleMap, floorTiles);
-        checkOpenSpaces(puzzleMap);
+        checkOpenSpaces(puzzleMap, floorTiles);
         checkEnoughSpaces(puzzleMap);
         checkSurroundedFloor(puzzleMap);
     }
