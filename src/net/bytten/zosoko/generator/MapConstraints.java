@@ -88,11 +88,16 @@ public class MapConstraints {
         }
     }
     
-    protected void checkEnoughSpaces(Set<Coords> floorTiles)
+    protected void checkEnoughSpaces(IPuzzleMap map, Set<Coords> floorTiles)
             throws RetryException {
         // The map must have enough space for the player, the planned number of
         // boxes and goals and at least one empty space
         if (floorTiles.size() < 2 + boxes*2)
+            throw new RetryException();
+        
+        // This requirement is not in the paper that this library is based on,
+        // but seems to improve the results on small maps
+        if (floorTiles.size() < map.getWidth()*map.getHeight()/2)
             throw new RetryException();
     }
     
@@ -137,7 +142,7 @@ public class MapConstraints {
             throws RetryException {
         Set<Coords> floorTiles = new TreeSet<Coords>(
                 PuzzleMap.getFloorTiles(map));
-        checkEnoughSpaces(floorTiles);
+        checkEnoughSpaces(map, floorTiles);
         checkConnectivity(map, floorTiles);
         checkOpenSpaces(floorTiles);
         checkSurroundedFloor(map, floorTiles);
