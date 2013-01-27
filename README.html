@@ -7,12 +7,19 @@
   <title></title>
 </head>
 <body>
-<h1 id="造倉庫-zōsōko">造倉庫 Zōsōko</h1>
-<p>Sōkoban puzzle generator</p>
+<h1 id="造倉庫-ぞうそうこ-zōsōko-zosoko">造倉庫 ぞうそうこ Zōsōko Zosoko</h1>
+<h2 id="sōkoban-puzzle-generator">Sōkoban puzzle generator</h2>
+<p>Sōkoban is a Japanese transport puzzle in which the player pushes boxes around a warehouse. See <a href="http://en.wikipedia.org/wiki/Sokoban">wikipedia for more information about Sōkoban</a>.</p>
+<p>This library will generate random Sōkoban puzzles for use in games. A player is included so you can quickly get a feel for the runtime of the algorithm and the library's features.</p>
+<h2 id="instructions">Instructions</h2>
+<p>Build in eclipse, then execute with:</p>
+<ul>
+<li>java -cp bin net.bytten.zosoko.player.Main -box-lines</li>
+</ul>
 <h2 id="options">Options</h2>
 <ul>
-<li>-width=W Sets the width of generated puzzles. Must be a multiple of 3.</li>
-<li>-height=H Sets the height of generated puzzles. Must be a multiple of 3.</li>
+<li>-width=W Sets the width of generated puzzles.</li>
+<li>-height=H Sets the height of generated puzzles.</li>
 <li>-boxes=N Sets the number of boxes and goals in generated puzzles.</li>
 <li>-unbounded Allow the player to walk around outside the bounds of the puzzle.</li>
 <li>-test Always generates the puzzle designed for testing the renderer and controller.</li>
@@ -20,7 +27,7 @@
 <li>-limit-depth=N Limit the depth of the farthest state search.</li>
 <li>-box-lines Sets the scoring metric to purely box-lines rather than the default based on the paper.</li>
 </ul>
-<p>The best results seem to be given with -box-lines.</p>
+<p>The best results seem to be given with widths and heights that are multiples of 3 and when -box-lines is given.</p>
 <h2 id="controls">Controls</h2>
 <ul>
 <li>Blue squares are boxes.</li>

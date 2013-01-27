@@ -1,11 +1,25 @@
-# 造倉庫 Zōsōko
+# 造倉庫 ぞうそうこ Zōsōko Zosoko
 
-Sōkoban puzzle generator
+## Sōkoban puzzle generator
+
+Sōkoban is a Japanese transport puzzle in which the player pushes boxes around
+a warehouse. See [wikipedia for more information about Sōkoban](http://en.wikipedia.org/wiki/Sokoban).
+
+This library will generate random Sōkoban puzzles for use in games. A player
+is included so you can quickly get a feel for the runtime of the algorithm and
+the library's features. 
+
+## Instructions
+
+Build in eclipse, then execute with:
+
+* java -cp bin net.bytten.zosoko.player.Main -box-lines
+
 
 ## Options
 
-* -width=W Sets the width of generated puzzles. Must be a multiple of 3.
-* -height=H Sets the height of generated puzzles. Must be a multiple of 3.
+* -width=W Sets the width of generated puzzles.
+* -height=H Sets the height of generated puzzles.
 * -boxes=N Sets the number of boxes and goals in generated puzzles.
 * -unbounded Allow the player to walk around outside the bounds of the puzzle.
 * -test Always generates the puzzle designed for testing the renderer and controller.
@@ -13,7 +27,8 @@ Sōkoban puzzle generator
 * -limit-depth=N Limit the depth of the farthest state search.
 * -box-lines Sets the scoring metric to purely box-lines rather than the default based on the paper.
 
-The best results seem to be given with -box-lines.
+The best results seem to be given with widths and heights that are multiples of
+3 and when -box-lines is given.
 
 ## Controls
 
