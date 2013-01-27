@@ -22,6 +22,7 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
     TemplateMapFiller mapFiller;
     MapConstraints mapConstraints;
     FarthestStateFinder farthestStateFinder;
+    IScoringMetric scoringMetric;
     
     ILogger logger;
     
@@ -35,8 +36,12 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
         
         mapFiller = new TemplateMapFiller(rand);
         mapConstraints = new MapConstraints(bounded, boxes);
-        // TODO depth-limiting options
         farthestStateFinder = new FarthestStateFinder(bounded);
+        scoringMetric = new ScoringMetric(rand);
+    }
+    
+    public void setScoringMetric(IScoringMetric scoringMetric) {
+        this.scoringMetric = scoringMetric;
     }
     
     // null => no limit
@@ -79,11 +84,6 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
         logActions(startState.getPath());
     }
     
-    protected int score(PuzzleState startState) {
-        // TODO
-        return startState.getBoxLines();
-    }
-    
     @Override
     public void generate() {
         int attempts = 0;
@@ -107,31 +107,33 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
                 mapConstraints.check(puzzleMap);
                 
                 GoalSupplier goalSupplier = new GoalSupplier(rand, boxes,
-                        puzzleMap, goalAttemptLimit, false);
+                        puzzleMap, goalAttemptLimit, true);
                 int goalAttempts = 0;
                 int bestScore = 0;
-                PuzzleState bestStartState = null;
+                FarthestStateFinder.Result bestResult = null;
                 while (goalSupplier.hasMore()) {
                     List<Coords> goals = goalSupplier.next();
                     
-                    PuzzleState farthestState = farthestStateFinder.go(
+                    FarthestStateFinder.Result result = farthestStateFinder.go(
                             puzzleMap, goals);
-                    if (farthestState != null) {
-                        int score = score(farthestState);
-                        if (score > bestScore || bestStartState == null) {
-                            bestStartState = farthestState;
-                            bestScore = score;
-                        }
+                    assert result != null && result.startState != null;
+                    int score = scoringMetric.score(result.startState,
+                            result.siblings);
+                    if (score > bestScore || bestResult == null) {
+                        bestResult = result;
+                        bestScore = score;
                     }
                     
                     ++goalAttempts;
                 }
                 log("Goal experiments: "+goalAttempts);
-                if (bestStartState == null)
+                if (bestResult == null)
                     throw new RetryException();
                 
                 log("Final score: "+bestScore);
+                log("Siblings: "+bestResult.siblings);
                 
+                PuzzleState bestStartState = bestResult.startState;
                 for (Coords goal: bestStartState.getGoals()) {
                     puzzleMap.setTile(goal.x, goal.y, Tile.GOAL);
                 }

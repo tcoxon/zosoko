@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import net.bytten.zosoko.IPuzzle;
+import net.bytten.zosoko.generator.BoxLinesScoringMetric;
 import net.bytten.zosoko.generator.IPuzzleGenerator;
 import net.bytten.zosoko.generator.PuzzleGenerator;
 import net.bytten.zosoko.generator.TestPuzzleGenerator;
@@ -76,6 +77,10 @@ public class Main extends JPanel implements KeyListener {
             int depthLimit = getIntArg("limit-depth", 0);
             if (depthLimit != 0) {
                 gen.setDepthLimit(depthLimit);
+            }
+            
+            if (getArg("box-lines") != null) {
+                gen.setScoringMetric(new BoxLinesScoringMetric());
             }
             
             return gen;

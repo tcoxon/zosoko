@@ -11,6 +11,7 @@ Sōkoban puzzle generator
 * -test Always generates the puzzle designed for testing the renderer and controller.
 * -limit-goal-experiments=N Limit the number of combinations of goals the generator tries for each map.
 * -limit-depth=N Limit the depth of the farthest state search.
+* -box-lines Sets the scoring metric to purely box-lines rather than the default based on the paper.
 
 ## Controls
 

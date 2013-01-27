@@ -11,6 +11,16 @@ import net.bytten.zosoko.util.Direction;
 
 public class FarthestStateFinder {
     
+    public static class Result {
+        public final PuzzleState startState;
+        public final int siblings;
+        
+        public Result(PuzzleState startState, int siblings) {
+            this.startState = startState;
+            this.siblings = siblings;
+        }
+    }
+    
     protected PuzzleMap map;
     protected boolean bounded;
     protected Integer depthLimit;
@@ -120,7 +130,7 @@ public class FarthestStateFinder {
         
     }
 
-    public PuzzleState go(PuzzleMap map, List<Coords> goals) throws RetryException {
+    public Result go(PuzzleMap map, List<Coords> goals) throws RetryException {
         this.map = map;
         for (Coords goal: goals) {
             map.setTile(goal.x, goal.y, Tile.GOAL);
@@ -134,8 +144,9 @@ public class FarthestStateFinder {
                 prevSet = resultSet;
                 resultSet = deepen(startSet, resultSet, depth);
             }
-            if (prevSet == null) throw new RetryException();
-            return chooseBest(prevSet);
+            if (prevSet == null || prevSet.size() == 0)
+                throw new RetryException();
+            return new Result(chooseBest(prevSet), prevSet.size()-1);
         } finally {
             // Clear up afterwards: remove the goals
             for (Coords goal: goals) {

@@ -48,5 +48,10 @@ public class ActionPath {
     public int getBoxLines() {
         return boxLines;
     }
+    
+    public int countPushes() {
+        if (previous == null) return 1;
+        return previous.countPushes()+1;
+    }
 
 }

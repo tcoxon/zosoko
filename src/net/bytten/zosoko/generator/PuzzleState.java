@@ -128,4 +128,9 @@ public class PuzzleState implements Comparable<PuzzleState> {
         return path;
     }
 
+    public int countPushes() {
+        if (path == null) return 0;
+        return path.countPushes();
+    }
+
 }
