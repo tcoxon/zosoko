@@ -13,6 +13,8 @@ Sōkoban puzzle generator
 * -limit-depth=N Limit the depth of the farthest state search.
 * -box-lines Sets the scoring metric to purely box-lines rather than the default based on the paper.
 
+The best results seem to be given with -box-lines.
+
 ## Controls
 
 * Blue squares are boxes.
@@ -24,13 +26,19 @@ Sōkoban puzzle generator
 
 ## TODO
 
-* Add optional limits to farthest state depth
-* Implement PuzzleGenerator.score()
+* Needs significant clean-up.
+* Profiling indicates the slowest part is PuzzleMap.getPlayerSpacePartition().
+  The use of this can be eliminated entirely by implementing the suggestions in
+  PlayerCloud, or maybe there is a way to speed it up?
+* After that is Coords.add, which must mean that there are no further
+  bottlenecks.
+* See if making FarthestStateFinder.go return a set of states would make the
+  default scoring metric work better.
 
 
 ## Links
 
-The paper this project is based on:
+The paper this library is based on:
 
 * [http://larc.unt.edu/ian/pubs/GAMEON-NA_METH_03.pdf](http://larc.unt.edu/ian/pubs/GAMEON-NA_METH_03.pdf)
 
