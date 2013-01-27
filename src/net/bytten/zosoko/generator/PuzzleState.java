@@ -1,6 +1,10 @@
 package net.bytten.zosoko.generator;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import net.bytten.zosoko.util.Coords;
 
@@ -64,9 +68,16 @@ public class PuzzleState implements Comparable<PuzzleState> {
         if (equals(o))
             return 0;
         assert boxes.size() == o.boxes.size();
-        for (int i = 0; i < boxes.size(); ++i) {
-            Coords box = boxes.get(i),
-                   obox = o.boxes.get(i);
+
+        // Go through the boxes in sorted order
+        List<Coords> myBoxes = new ArrayList<Coords>(boxes),
+                otherBoxes = new ArrayList<Coords>(o.boxes);
+        Collections.sort(myBoxes);
+        Collections.sort(otherBoxes);
+        
+        for (int i = 0; i < myBoxes.size(); ++i) {
+            Coords box = myBoxes.get(i),
+                   obox = otherBoxes.get(i);
             int cmp = box.compareTo(obox);
             if (cmp != 0) return cmp;
         }
@@ -79,7 +90,9 @@ public class PuzzleState implements Comparable<PuzzleState> {
     public boolean equals(Object o) {
         if (o instanceof PuzzleState) {
             PuzzleState other = (PuzzleState)o;
-            if (boxes.equals(other.boxes) && player.equals(other.player)) {
+            Set<Coords> myBoxes = new TreeSet<Coords>(boxes),
+                    otherBoxes = new TreeSet<Coords>(other.boxes);
+            if (myBoxes.equals(otherBoxes) && player.equals(other.player)) {
                 if (getBoxLines() < other.getBoxLines()) {
                     other.path = path;
                 } else if (other.getBoxLines() < getBoxLines()) {

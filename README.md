@@ -22,7 +22,8 @@ Sōkoban puzzle generator
 
 ## TODO
 
-TODO
+* Add optional limits to farthest state depth
+* Implement PuzzleGenerator.score()
 
 
 ## Links
