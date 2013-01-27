@@ -118,7 +118,7 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
                             puzzleMap, goals);
                     if (farthestState != null) {
                         int score = score(farthestState);
-                        if (score > bestScore) {
+                        if (score > bestScore || bestStartState == null) {
                             bestStartState = farthestState;
                             bestScore = score;
                         }
@@ -161,6 +161,10 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
     @Override
     public void log(String msg) {
         if (logger != null) logger.log(msg);
+    }
+
+    public void setDepthLimit(Integer depthLimit) {
+        farthestStateFinder.setDepthLimit(depthLimit);
     }
 
 }

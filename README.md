@@ -10,6 +10,7 @@ Sōkoban puzzle generator
 * -unbounded Allow the player to walk around outside the bounds of the puzzle.
 * -test Always generates the puzzle designed for testing the renderer and controller.
 * -limit-goal-experiments=N Limit the number of combinations of goals the generator tries for each map.
+* -limit-depth=N Limit the depth of the farthest state search.
 
 ## Controls
 

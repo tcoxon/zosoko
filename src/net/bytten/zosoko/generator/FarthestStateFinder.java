@@ -13,6 +13,7 @@ public class FarthestStateFinder {
     
     protected PuzzleMap map;
     protected boolean bounded;
+    protected Integer depthLimit;
 
     public FarthestStateFinder(boolean bounded) {
         this.bounded = bounded;
@@ -22,7 +23,7 @@ public class FarthestStateFinder {
         int bestScore = 0;
         PuzzleState best = null;
         for (PuzzleState state: states) {
-            if (state.getBoxLines() > bestScore) {
+            if (state.getBoxLines() > bestScore || best == null) {
                 bestScore = state.getBoxLines();
                 best = state;
             }
@@ -128,7 +129,8 @@ public class FarthestStateFinder {
             
             Set<PuzzleState> startSet = makeStartSet(goals);
             Set<PuzzleState> resultSet = startSet, prevSet = null;
-            for (int depth = 1; resultSet.size() > 0; ++depth) {
+            for (int depth = 1; resultSet.size() > 0 &&
+                    (depthLimit == null || depth <= depthLimit); ++depth) {
                 prevSet = resultSet;
                 resultSet = deepen(startSet, resultSet, depth);
             }
@@ -140,6 +142,10 @@ public class FarthestStateFinder {
                 map.setTile(goal.x, goal.y, Tile.FLOOR);
             }
         }
+    }
+
+    public void setDepthLimit(Integer depthLimit) {
+        this.depthLimit = depthLimit;
     }
 
 }

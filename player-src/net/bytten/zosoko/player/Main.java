@@ -73,6 +73,11 @@ public class Main extends JPanel implements KeyListener {
                 gen.setGoalAttemptLimit(goalAttemptLimit);
             }
             
+            int depthLimit = getIntArg("limit-depth", 0);
+            if (depthLimit != 0) {
+                gen.setDepthLimit(depthLimit);
+            }
+            
             return gen;
         } else {
             return new TestPuzzleGenerator(getArg("unbounded") == null);
