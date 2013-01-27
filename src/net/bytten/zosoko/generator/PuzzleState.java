@@ -115,4 +115,12 @@ public class PuzzleState implements Comparable<PuzzleState> {
         return goals;
     }
 
+    public PuzzleMap getMap() {
+        return map;
+    }
+
+    public ActionPath getPath() {
+        return path;
+    }
+
 }

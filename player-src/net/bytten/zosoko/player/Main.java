@@ -145,6 +145,9 @@ public class Main extends JPanel implements KeyListener {
             System.exit(0);
         } else if (e.getKeyCode() == KeyEvent.VK_F5) {
             regenerate(new Random().nextLong());
+        } else if (e.getKeyCode() == KeyEvent.VK_R) {
+            if (puzzle != null)
+                puzzle.reset();
         } else {
             controller.key(e.getKeyCode());
         }

@@ -11,6 +11,14 @@ Sōkoban puzzle generator
 * -test Always generates the puzzle designed for testing the renderer and controller.
 * -limit-goal-experiments=N Limit the number of combinations of goals the generator tries for each map.
 
+## Controls
+
+* Blue squares are boxes.
+* The red circle is the player.
+* Use the arrow keys to move the player and push boxes.
+* Press R to reset the puzzle.
+* Press F5 to generate a new puzzle.
+
 
 ## TODO
 

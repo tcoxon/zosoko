@@ -42,5 +42,13 @@ public class PlayerCloud implements Comparable<PlayerCloud> {
         // Compare the top-left-most coordinates of each player's partition
         return coords.first().compareTo(o.coords.first());
     }
+
+    public boolean canReach(Coords box) {
+        return coords.contains(box);
+    }
+
+    public TreeSet<Coords> getCoordsSet() {
+        return coords;
+    }
     
 }

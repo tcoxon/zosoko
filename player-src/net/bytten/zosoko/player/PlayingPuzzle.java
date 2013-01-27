@@ -16,8 +16,12 @@ public class PlayingPuzzle implements IPuzzle {
     
     public PlayingPuzzle(IPuzzle puzzle) {
         this.puzzle = puzzle;
-        this.playerPosition = getPlayerStartPosition();
-        this.boxPositions = new ArrayList<Coords>(getBoxStartPositions());
+        reset();
+    }
+    
+    public void reset() {
+        playerPosition = getPlayerStartPosition();
+        boxPositions = new ArrayList<Coords>(getBoxStartPositions());
     }
 
     @Override

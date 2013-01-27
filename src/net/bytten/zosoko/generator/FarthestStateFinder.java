@@ -1,11 +1,13 @@
 package net.bytten.zosoko.generator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import net.bytten.zosoko.Tile;
 import net.bytten.zosoko.util.Coords;
+import net.bytten.zosoko.util.Direction;
 
 public class FarthestStateFinder {
     
@@ -40,9 +42,50 @@ public class FarthestStateFinder {
         return states;
     }
     
+    protected PuzzleState derive(PuzzleState state, int box, Direction pull) {
+        List<Coords> boxes = state.getBoxes(),
+                newBoxes = new ArrayList<Coords>(boxes);
+        Coords newBoxPos = boxes.get(box).add(pull.x, pull.y),
+               playerPos = newBoxPos.add(pull.x, pull.y);
+        newBoxes.set(box, newBoxPos);
+        
+        ActionPath action = new ActionPath(state.getPath(), box, pull);
+        return new PuzzleState.Builder(state.getMap(), state.getGoals())
+            .setPath(action)
+            .setBoxes(newBoxes)
+            .setPlayer(playerPos)
+            .build();
+    }
+    
     protected Set<PuzzleState> expand(PuzzleState state) {
         Set<PuzzleState> states = new TreeSet<PuzzleState>();
-        // TODO
+        
+        PlayerCloud player = state.getPlayer();
+        for (int boxnum = 0; boxnum < state.getBoxes().size(); ++boxnum) {
+            Coords box = state.getBoxes().get(boxnum);
+            if (player.canReach(box)) {
+                for (Direction d: Direction.values()) {
+                    // Since we're working backwards from the goal, the player
+                    // _pulls_ boxes
+                    Coords nextBoxPos = box.add(d.x,d.y),
+                           nextPlayerPos = nextBoxPos.add(d.x,d.y);
+                    if (!player.canReach(nextBoxPos)) continue;
+                    if (state.getBoxes().contains(nextPlayerPos) ||
+                            state.getBoxes().contains(nextBoxPos) ||
+                            !state.getMap().getBounds().contains(nextBoxPos) ||
+                            !state.getMap().getBounds().contains(nextPlayerPos) ||
+                            state.getMap().getTile(nextBoxPos.x, nextBoxPos.y)
+                                    != Tile.FLOOR ||
+                            state.getMap().getTile(nextPlayerPos.x, nextPlayerPos.y)
+                                    == Tile.WALL) {
+                        continue;
+                    }
+                    
+                    states.add(derive(state, boxnum, d));
+                }
+            }
+        }
+        
         return states;
     }
     

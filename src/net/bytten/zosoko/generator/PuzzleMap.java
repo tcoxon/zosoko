@@ -16,11 +16,13 @@ public class PuzzleMap implements IPuzzleMap {
     protected boolean bounded;
     protected Tile[][] tiles;
     protected int width, height;
+    protected Bounds bounds;
     
     public PuzzleMap(boolean bounded, int width, int height) {
         this.bounded = bounded;
         this.width = width;
         this.height = height;
+        this.bounds = new Bounds(width, height);
         tiles = new Tile[width][height];
     }
     

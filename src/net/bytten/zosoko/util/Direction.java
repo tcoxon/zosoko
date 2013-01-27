@@ -27,11 +27,10 @@ public enum Direction {
     /**
      * Gets the direction completely opposite to this direction.
      * 
-     * @param d the direction to return the opposite of
-     * @return  the opposite direction to d
+     * @return  the opposite direction to this
      */
-    public static Direction oppositeDirection(Direction d) {
-        switch (d) {
+    public Direction opposite() {
+        switch (this) {
         case N: return S;
         case E: return W;
         case S: return N;

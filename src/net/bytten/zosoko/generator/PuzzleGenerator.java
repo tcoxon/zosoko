@@ -48,6 +48,15 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
         this.logger = logger;
     }
     
+    protected Coords choosePlayerPos(PuzzleState bestStartState)
+            throws RetryException {
+        for (Coords xy: bestStartState.getPlayer().getCoordsSet()) {
+            if (!bestStartState.getBoxes().contains(xy))
+                return xy;
+        }
+        throw new RetryException();
+    }
+    
     @Override
     public void generate() {
         int attempts = 0;
@@ -97,7 +106,7 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
                 
                 // DONE!
                 puzzle = new Puzzle(puzzleMap, bestStartState.getBoxes(),
-                        bestStartState.getPlayer().getAnyCoords());
+                        choosePlayerPos(bestStartState));
                 
                 log("Full reattempts: "+attempts);
                 return;
