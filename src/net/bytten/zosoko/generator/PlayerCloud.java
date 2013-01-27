@@ -1,17 +1,21 @@
 package net.bytten.zosoko.generator;
 
-import java.util.Set;
+import java.util.TreeSet;
 
 import net.bytten.zosoko.util.Coords;
 
-public class PlayerCloud {
+public class PlayerCloud implements Comparable<PlayerCloud> {
 
     // This could be made a lot smarter by working out the minimum cuts of the
     // map and then when a box partitions the graph, the PlayerCloud is the
     // partition the player is in.
-    protected Set<Coords> coords;
     
-    public PlayerCloud(Set<Coords> coords) {
+    // Or maybe use A* to determine if two PlayerClouds' coords are in the
+    // same partition (at the cost of making equals() more expensive).
+    
+    protected TreeSet<Coords> coords;
+    
+    public PlayerCloud(TreeSet<Coords> coords) {
         this.coords = coords;
     }
     
@@ -20,9 +24,23 @@ public class PlayerCloud {
         if (o instanceof PlayerCloud) {
             PlayerCloud other = (PlayerCloud)o;
             if (coords.size() == 0) return other.coords.size() == 0;
-            return other.coords.contains(coords.iterator().next());
+            return other.coords.contains(getAnyCoords());
         }
         return false;
     }
 
+    // Returns one of the coords in this cloud. Not guaranteed to return any
+    // particular coordinates.
+    public Coords getAnyCoords() {
+        return coords.first();
+    }
+
+    @Override
+    public int compareTo(PlayerCloud o) {
+        if (equals(o)) return 0;
+        if (coords.size() == 0) return -1;
+        // Compare the top-left-most coordinates of each player's partition
+        return coords.first().compareTo(o.coords.first());
+    }
+    
 }

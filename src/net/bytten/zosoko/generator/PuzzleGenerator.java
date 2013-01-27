@@ -1,67 +1,15 @@
 package net.bytten.zosoko.generator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import net.bytten.zosoko.IPuzzle;
-import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
-import net.bytten.zosoko.util.Bounds;
 import net.bytten.zosoko.util.Coords;
 import net.bytten.zosoko.util.ILogger;
 
 public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
     
-    protected class MappedPuzzle implements IPuzzle {
-        
-        IPuzzleMap map;
-
-        public MappedPuzzle(IPuzzleMap map) {
-            this.map = map;
-        }
-        
-        @Override
-        public List<Coords> getBoxStartPositions() {
-            return new ArrayList<Coords>(0);
-        }
-
-        @Override
-        public Coords getPlayerStartPosition() {
-            return new Coords(0,0);
-        }
-
-        @Override
-        public Bounds getBounds() {
-            return map.getBounds();
-        }
-
-        @Override
-        public Tile getTile(int x, int y) {
-            return map.getTile(x, y);
-        }
-
-        @Override
-        public boolean isPlayerBounded() {
-            return map.isPlayerBounded();
-        }
-
-        public void setMap(IPuzzleMap map) {
-            this.map = map;
-        }
-
-        @Override
-        public int getWidth() {
-            return map.getWidth();
-        }
-
-        @Override
-        public int getHeight() {
-            return map.getHeight();
-        }
-        
-    }
-
     int width, height, boxes;
     boolean bounded;
     Integer goalAttemptLimit;
@@ -73,6 +21,7 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
     
     TemplateMapFiller mapFiller;
     MapConstraints mapConstraints;
+    FarthestStateFinder farthestStateFinder;
     
     ILogger logger;
     
@@ -86,6 +35,8 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
         
         mapFiller = new TemplateMapFiller(rand);
         mapConstraints = new MapConstraints(bounded, boxes);
+        // TODO depth-limiting options
+        farthestStateFinder = new FarthestStateFinder(bounded);
     }
     
     // null => no limit
@@ -95,11 +46,6 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
     
     public void setLogger(ILogger logger) {
         this.logger = logger;
-    }
-    
-    protected int tryGoals(List<Coords> goals) {
-        // TODO find the farthest state from the goal and score it
-        return 1;
     }
     
     @Override
@@ -127,25 +73,31 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
                 GoalSupplier goalSupplier = new GoalSupplier(rand, boxes,
                         puzzleMap, goalAttemptLimit, false);
                 int goalAttempts = 0;
-                int bestGoalScore = 0;
-                List<Coords> bestGoals = null;
+                int bestScore = 0;
+                PuzzleState bestStartState = null;
                 while (goalSupplier.hasMore()) {
                     List<Coords> goals = goalSupplier.next();
                     
-                    int score = tryGoals(goals);
-                    if (score > bestGoalScore) {
-                        bestGoals = goals;
+                    PuzzleState farthestState = farthestStateFinder.go(
+                            puzzleMap, goals);
+                    if (farthestState != null &&
+                            farthestState.getScore() > bestScore) {
+                        bestStartState = farthestState;
                     }
                     
                     ++goalAttempts;
                 }
                 log("Goal experiments: "+goalAttempts);
-                if (bestGoals == null)
+                if (bestStartState == null)
                     throw new RetryException();
                 
-                for (Coords goal: bestGoals) {
+                for (Coords goal: bestStartState.getGoals()) {
                     puzzleMap.setTile(goal.x, goal.y, Tile.GOAL);
                 }
+                
+                // DONE!
+                puzzle = new Puzzle(puzzleMap, bestStartState.getBoxes(),
+                        bestStartState.getPlayer().getAnyCoords());
                 
                 log("Full reattempts: "+attempts);
                 return;
