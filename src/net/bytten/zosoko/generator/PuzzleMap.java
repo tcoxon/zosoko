@@ -137,5 +137,21 @@ public class PuzzleMap implements IPuzzleMap {
         
         return visited;
     }
+
+    public static Coords getAnyBorderNonWallTile(PuzzleMap map) {
+        for (int x = 0; x < map.getWidth(); ++x)
+            if (map.getTile(x, 0) != Tile.WALL)
+                return new Coords(x, 0);
+            else if (map.getTile(x, map.getHeight()-1) != Tile.WALL)
+                return new Coords(x, map.getHeight()-1);
+        
+        for (int y = 0; y < map.getHeight(); ++y)
+            if (map.getTile(0, y) != Tile.WALL)
+                return new Coords(0, y);
+            else if (map.getTile(map.getWidth()-1, y) != Tile.WALL)
+                return new Coords(map.getWidth()-1, y);
+        
+        return null;
+    }
     
 }

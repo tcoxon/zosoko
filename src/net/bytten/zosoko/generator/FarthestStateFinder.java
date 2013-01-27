@@ -30,14 +30,22 @@ public class FarthestStateFinder {
         return best;
     }
     
-    protected Set<PuzzleState> makeStartSet(List<Coords> goals) {
+    protected Set<PuzzleState> makeStartSet(List<Coords> goals)
+            throws RetryException {
         Set<PuzzleState> states = new TreeSet<PuzzleState>();
         // TODO put player into each available space partition. At the moment
         // it only places the player into one area
+        Coords player;
+        if (!bounded) {
+            player = PuzzleMap.getAnyBorderNonWallTile(map);
+            if (player == null) throw new RetryException();
+        } else {
+            player = PuzzleMap.getAnyFloorTile(map);
+        }
         states.add(new PuzzleState.Builder(map, goals)
             .setBoxes(goals)
             .setPath(null)
-            .setPlayer(PuzzleMap.getAnyFloorTile(map))
+            .setPlayer(player)
             .build());
         return states;
     }
@@ -111,7 +119,7 @@ public class FarthestStateFinder {
         
     }
 
-    public PuzzleState go(PuzzleMap map, List<Coords> goals) {
+    public PuzzleState go(PuzzleMap map, List<Coords> goals) throws RetryException {
         this.map = map;
         for (Coords goal: goals) {
             map.setTile(goal.x, goal.y, Tile.GOAL);
@@ -124,7 +132,7 @@ public class FarthestStateFinder {
                 prevSet = resultSet;
                 resultSet = deepen(startSet, resultSet, depth);
             }
-            assert prevSet != null;
+            if (prevSet == null) throw new RetryException();
             return chooseBest(prevSet);
         } finally {
             // Clear up afterwards: remove the goals
