@@ -39,7 +39,6 @@ public class PuzzleState implements Comparable<PuzzleState> {
         
         public PuzzleState build() {
             assert state.boxes != null && state.player != null;
-            state.computeScore();
             return state;
         }
 
@@ -51,7 +50,6 @@ public class PuzzleState implements Comparable<PuzzleState> {
     protected PlayerCloud player;
     protected List<Coords> boxes;
     
-    protected int score;
     protected ActionPath path;
     
     protected PuzzleState(PuzzleMap map, List<Coords> goals) {
@@ -59,10 +57,6 @@ public class PuzzleState implements Comparable<PuzzleState> {
         this.goals = goals;
     }
     
-    protected void computeScore() {
-        score = 1;
-    }
-
     // Slightly magic because it will set the path for each of the objects to
     // the shortest path when they compare equal.
     @Override
@@ -86,11 +80,9 @@ public class PuzzleState implements Comparable<PuzzleState> {
         if (o instanceof PuzzleState) {
             PuzzleState other = (PuzzleState)o;
             if (boxes.equals(other.boxes) && player.equals(other.player)) {
-                if (score < other.score) {
-                    other.score = score;
+                if (getBoxLines() < other.getBoxLines()) {
                     other.path = path;
-                } else if (other.score < score) {
-                    score = other.score;
+                } else if (other.getBoxLines() < getBoxLines()) {
                     path = other.path;
                 }
                 return true;
@@ -107,8 +99,8 @@ public class PuzzleState implements Comparable<PuzzleState> {
         return boxes;
     }
 
-    public int getScore() {
-        return score;
+    public int getBoxLines() {
+        return path == null ? 0 : path.getBoxLines();
     }
 
     public List<Coords> getGoals() {

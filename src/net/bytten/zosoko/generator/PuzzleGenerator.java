@@ -75,8 +75,13 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
             log("        "+box.toString());
         }
         log("    Player: "+playerPos.toString());
-        log("    Actions:");
+        log("    Actions ("+startState.getBoxLines()+" box-lines):");
         logActions(startState.getPath());
+    }
+    
+    protected int score(PuzzleState startState) {
+        // TODO
+        return startState.getBoxLines();
     }
     
     @Override
@@ -111,9 +116,12 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
                     
                     PuzzleState farthestState = farthestStateFinder.go(
                             puzzleMap, goals);
-                    if (farthestState != null &&
-                            farthestState.getScore() > bestScore) {
-                        bestStartState = farthestState;
+                    if (farthestState != null) {
+                        int score = score(farthestState);
+                        if (score > bestScore) {
+                            bestStartState = farthestState;
+                            bestScore = score;
+                        }
                     }
                     
                     ++goalAttempts;
@@ -121,6 +129,8 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
                 log("Goal experiments: "+goalAttempts);
                 if (bestStartState == null)
                     throw new RetryException();
+                
+                log("Final score: "+bestScore);
                 
                 for (Coords goal: bestStartState.getGoals()) {
                     puzzleMap.setTile(goal.x, goal.y, Tile.GOAL);

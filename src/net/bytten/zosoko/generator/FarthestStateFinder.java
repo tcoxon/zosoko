@@ -22,8 +22,8 @@ public class FarthestStateFinder {
         int bestScore = 0;
         PuzzleState best = null;
         for (PuzzleState state: states) {
-            if (state.getScore() > bestScore) {
-                bestScore = state.getScore();
+            if (state.getBoxLines() > bestScore) {
+                bestScore = state.getBoxLines();
                 best = state;
             }
         }
