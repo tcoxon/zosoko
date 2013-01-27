@@ -57,6 +57,28 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
         throw new RetryException();
     }
     
+    protected void logActions(ActionPath actions) {
+        if (actions == null) return;
+        log("        Push box #"+actions.getBox()+" "+actions.getPushDir());
+        logActions(actions.getPrevious());
+    }
+    
+    protected void logSolution(PuzzleState startState, Coords playerPos) {
+        if (logger == null) return;
+        log("Solution:");
+        log("    Goals:");
+        for (Coords goal: startState.getGoals()) {
+            log("        "+goal.toString());
+        }
+        log("    Boxes:");
+        for (Coords box: startState.getBoxes()) {
+            log("        "+box.toString());
+        }
+        log("    Player: "+playerPos.toString());
+        log("    Actions:");
+        logActions(startState.getPath());
+    }
+    
     @Override
     public void generate() {
         int attempts = 0;
@@ -105,10 +127,13 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
                 }
                 
                 // DONE!
+                Coords playerPos = choosePlayerPos(bestStartState);
                 puzzle = new Puzzle(puzzleMap, bestStartState.getBoxes(),
-                        choosePlayerPos(bestStartState));
+                        playerPos);
                 
                 log("Full reattempts: "+attempts);
+                
+                logSolution(bestStartState, playerPos);
                 return;
                 
             } catch (RetryException e) {
