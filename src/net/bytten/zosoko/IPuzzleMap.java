@@ -8,6 +8,8 @@ public interface IPuzzleMap {
     public int getWidth();
     public int getHeight();
     
+    public boolean isPlayerBounded();
+    
     public Tile getTile(int x, int y);
 
 }

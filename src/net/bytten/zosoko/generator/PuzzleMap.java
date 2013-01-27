@@ -10,17 +10,19 @@ import net.bytten.zosoko.util.Coords;
 
 public class PuzzleMap implements IPuzzleMap {
 
+    protected boolean bounded;
     protected Tile[][] tiles;
     protected int width, height;
     
-    public PuzzleMap(int width, int height) {
+    public PuzzleMap(boolean bounded, int width, int height) {
+        this.bounded = bounded;
         this.width = width;
         this.height = height;
         tiles = new Tile[width][height];
     }
     
     public PuzzleMap(IPuzzleMap other) {
-        this(other.getWidth(), other.getHeight());
+        this(other.isPlayerBounded(), other.getWidth(), other.getHeight());
         
         for (int x = 0; x < width; ++x)
             for (int y = 0; y < height; ++y)
@@ -60,6 +62,11 @@ public class PuzzleMap implements IPuzzleMap {
                     floors.add(new Coords(x,y));
         
         return floors;
+    }
+
+    @Override
+    public boolean isPlayerBounded() {
+        return bounded;
     }
     
 }

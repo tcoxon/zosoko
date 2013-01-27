@@ -43,7 +43,7 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
 
         @Override
         public boolean isPlayerBounded() {
-            return bounded;
+            return map.isPlayerBounded();
         }
 
         public void setMap(IPuzzleMap map) {
@@ -108,7 +108,7 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
         while (true) {
             try {
         
-                templateMap = new TemplateMap(width, height);
+                templateMap = new TemplateMap(bounded, width, height);
                 puzzle = new MappedPuzzle(templateMap);
                 
                 // Fill the map with random 3x3 templates (randomly rotated and
@@ -132,17 +132,9 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
                 while (goalSupplier.hasMore()) {
                     List<Coords> goals = goalSupplier.next();
                     
-                    for (Coords goal: goals) {
-                        puzzleMap.setTile(goal.x, goal.y, Tile.GOAL);
-                    }
-                    
                     int score = tryGoals(goals);
                     if (score > bestGoalScore) {
                         bestGoals = goals;
-                    }
-                    
-                    for (Coords goal: goals) {
-                        puzzleMap.setTile(goal.x, goal.y, Tile.FLOOR);
                     }
                     
                     ++goalAttempts;
@@ -150,6 +142,10 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
                 log("Goal experiments: "+goalAttempts);
                 if (bestGoals == null)
                     throw new RetryException();
+                
+                for (Coords goal: bestGoals) {
+                    puzzleMap.setTile(goal.x, goal.y, Tile.GOAL);
+                }
                 
                 log("Full reattempts: "+attempts);
                 return;

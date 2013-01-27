@@ -7,11 +7,13 @@ import net.bytten.zosoko.util.Coords;
 
 public class TemplateMap implements IPuzzleMap {
     
+    boolean bounded;
     int width, height;
     Template[][] templates;
     TemplateTransform[][] transforms;
 
-    public TemplateMap(int width, int height) {
+    public TemplateMap(boolean bounded, int width, int height) {
+        this.bounded = bounded;
         this.width = width;
         this.height = height;
         
@@ -74,6 +76,11 @@ public class TemplateMap implements IPuzzleMap {
             TemplateTransform transform) {
         templates[x][y] = template;
         transforms[x][y] = transform;
+    }
+
+    @Override
+    public boolean isPlayerBounded() {
+        return bounded;
     }
 
 }
