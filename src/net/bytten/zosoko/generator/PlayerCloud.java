@@ -2,6 +2,7 @@ package net.bytten.zosoko.generator;
 
 import java.util.TreeSet;
 
+import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.util.Coords;
 
 public class PlayerCloud implements Comparable<PlayerCloud> {
@@ -49,6 +50,15 @@ public class PlayerCloud implements Comparable<PlayerCloud> {
 
     public TreeSet<Coords> getCoordsSet() {
         return coords;
+    }
+
+    public boolean touchesEdge(IPuzzleMap map) {
+        for (Coords pos: coords) {
+            if (pos.x <= 0 || pos.y <= 0 || pos.x >= map.getWidth()-1 ||
+                    pos.y >= map.getHeight()-1)
+                return true;
+        }
+        return false;
     }
     
 }

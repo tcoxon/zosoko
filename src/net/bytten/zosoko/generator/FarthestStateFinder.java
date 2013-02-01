@@ -144,6 +144,17 @@ public class FarthestStateFinder {
                 prevSet = resultSet;
                 resultSet = deepen(startSet, resultSet, depth);
             }
+            
+            if (!bounded) {
+                Set<PuzzleState> newSet = new TreeSet<PuzzleState>(prevSet);
+                for (PuzzleState state: prevSet) {
+                    if (!state.player.touchesEdge(map)) {
+                        newSet.remove(state);
+                    }
+                }
+                prevSet = newSet;
+            }
+            
             if (prevSet == null || prevSet.size() == 0)
                 throw new RetryException();
             return new Result(chooseBest(prevSet), prevSet.size()-1);
