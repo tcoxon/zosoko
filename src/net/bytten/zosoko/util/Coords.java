@@ -96,6 +96,10 @@ public class Coords implements Comparable<Coords> {
         return new Coords(x+d.x, y+d.y);
     }
     
+    public Coords add(Direction d) {
+        return new Coords(x + d.x, y + d.y);
+    }
+    
     public String toString() {
         return x+","+y;
     }
