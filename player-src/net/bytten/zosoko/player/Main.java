@@ -91,7 +91,7 @@ public class Main extends JPanel implements KeyListener {
     
     public void regenerate(final long seed) {
         if (generatorThread == null) {
-            generatorThread = new Thread() {
+            generatorThread = new Thread("Zosoko.player.regenerate Thread") {
                 public void run() {
                     puzzleGen = makePuzzleGenerator(seed);
                     if (puzzleGen != null) {
