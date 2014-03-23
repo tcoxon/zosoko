@@ -1,5 +1,6 @@
 package net.bytten.zosoko.generator;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +14,7 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
     int width, height, boxes;
     boolean bounded;
     Integer goalAttemptLimit;
+    Long timeLimit;
     
     TemplateMap templateMap;
     PuzzleMap puzzleMap;
@@ -111,7 +113,10 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
                 int goalAttempts = 0;
                 int bestScore = 0;
                 FarthestStateFinder.Result bestResult = null;
-                while (goalSupplier.hasMore()) {
+                long startTime = new Date().getTime();
+                while (goalSupplier.hasMore() &&
+                        (timeLimit == null ||
+                        new Date().getTime()-startTime < timeLimit)) {
                     List<Coords> goals = goalSupplier.next();
                     
                     FarthestStateFinder.Result result = farthestStateFinder.go(
@@ -167,6 +172,10 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
 
     public void setDepthLimit(Integer depthLimit) {
         farthestStateFinder.setDepthLimit(depthLimit);
+    }
+    
+    public void setTimeLimit(Long millis) {
+        timeLimit = millis;
     }
 
 }

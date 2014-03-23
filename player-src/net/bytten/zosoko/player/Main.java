@@ -69,6 +69,11 @@ public class Main extends JPanel implements KeyListener {
                     getArg("unbounded") == null);
             gen.setLogger(new StdoutLogger());
             
+            String timeLimit = getArg("time-limit", args);
+            if (timeLimit != null) {
+                gen.setTimeLimit(Long.parseLong(timeLimit));
+            }
+            
             int goalAttemptLimit = getIntArg("limit-goal-experiments", 0);
             if (goalAttemptLimit != 0) {
                 gen.setGoalAttemptLimit(goalAttemptLimit);

@@ -25,6 +25,7 @@ Build in eclipse, then execute with:
 * -test Always generates the puzzle designed for testing the renderer and controller.
 * -limit-goal-experiments=N Limit the number of combinations of goals the generator tries for each map.
 * -limit-depth=N Limit the depth of the farthest state search.
+* -time-limit=N Limit how long (in milliseconds) to search.
 * -box-lines Sets the scoring metric to purely box-lines rather than the default based on the paper.
 
 The best results seem to be given with widths and heights that are multiples of
