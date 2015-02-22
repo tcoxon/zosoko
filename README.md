@@ -15,6 +15,7 @@ Build in eclipse, then execute with:
 
 * java -cp bin net.bytten.zosoko.player.Main -box-lines
 
+Also requires my gameutil library, which [you can get the source for on github](https://github.com/tcoxon/gameutil).
 
 ## Options
 

@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 
 import net.bytten.zosoko.Tile;
-import net.bytten.zosoko.util.Coords;
+import net.bytten.gameutil.Coords;
 
 public class PuzzleController {
     

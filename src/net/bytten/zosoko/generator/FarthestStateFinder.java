@@ -6,8 +6,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import net.bytten.zosoko.Tile;
-import net.bytten.zosoko.util.Coords;
-import net.bytten.zosoko.util.Direction;
+import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Direction;
 
 public class FarthestStateFinder {
     

@@ -3,9 +3,9 @@ package net.bytten.zosoko.generator;
 import java.util.Random;
 
 import net.bytten.zosoko.Tile;
-import net.bytten.zosoko.util.Bounds;
-import net.bytten.zosoko.util.Coords;
-import net.bytten.zosoko.util.Direction;
+import net.bytten.gameutil.Rect2dI;
+import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Direction;
 
 public class ScoringMetric implements IScoringMetric {
     
@@ -23,7 +23,7 @@ public class ScoringMetric implements IScoringMetric {
     }
     
     private boolean isTouchingWall(Coords box, PuzzleState state) {
-        Bounds bounds = state.getMap().getBounds();
+        Rect2dI bounds = state.getMap().getBounds();
         for (Direction d: Direction.values()) {
             Coords neighbor = box.add(d.x,d.y);
             if (!bounds.contains(neighbor)) {

@@ -5,8 +5,8 @@ import java.util.List;
 
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.Tile;
-import net.bytten.zosoko.util.Bounds;
-import net.bytten.zosoko.util.Coords;
+import net.bytten.gameutil.Rect2dI;
+import net.bytten.gameutil.Coords;
 
 public class TestPuzzleGenerator implements IPuzzleGenerator {
 
@@ -21,8 +21,8 @@ public class TestPuzzleGenerator implements IPuzzleGenerator {
          */
         
         @Override
-        public Bounds getBounds() {
-            return new Bounds(6,3);
+        public Rect2dI getBounds() {
+            return new Rect2dI(0, 0, 6,3);
         }
 
         @Override

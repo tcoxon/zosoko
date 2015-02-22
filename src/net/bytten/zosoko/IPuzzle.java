@@ -2,7 +2,7 @@ package net.bytten.zosoko;
 
 import java.util.List;
 
-import net.bytten.zosoko.util.Coords;
+import net.bytten.gameutil.Coords;
 
 public interface IPuzzle extends IPuzzleMap {
     

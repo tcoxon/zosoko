@@ -6,7 +6,7 @@ import java.util.Random;
 
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.Tile;
-import net.bytten.zosoko.util.Coords;
+import net.bytten.gameutil.Coords;
 import net.bytten.zosoko.util.ILogger;
 
 public class PuzzleGenerator implements IPuzzleGenerator, ILogger {

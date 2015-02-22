@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import net.bytten.zosoko.util.Coords;
+import net.bytten.gameutil.Coords;
 
 public class PuzzleState implements Comparable<PuzzleState> {
     

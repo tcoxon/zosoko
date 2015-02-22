@@ -1,6 +1,6 @@
 package net.bytten.zosoko.generator;
 
-import net.bytten.zosoko.util.Direction;
+import net.bytten.gameutil.Direction;
 
 public class ActionPath {
     

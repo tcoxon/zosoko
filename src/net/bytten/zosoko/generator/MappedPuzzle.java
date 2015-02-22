@@ -6,8 +6,8 @@ import java.util.List;
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
-import net.bytten.zosoko.util.Bounds;
-import net.bytten.zosoko.util.Coords;
+import net.bytten.gameutil.Rect2dI;
+import net.bytten.gameutil.Coords;
 
 class MappedPuzzle implements IPuzzle {
     
@@ -28,7 +28,7 @@ class MappedPuzzle implements IPuzzle {
     }
 
     @Override
-    public Bounds getBounds() {
+    public Rect2dI getBounds() {
         return map.getBounds();
     }
 

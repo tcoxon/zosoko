@@ -8,15 +8,15 @@ import java.awt.geom.AffineTransform;
 
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.Tile;
-import net.bytten.zosoko.util.Bounds;
-import net.bytten.zosoko.util.Coords;
+import net.bytten.gameutil.Rect2dI;
+import net.bytten.gameutil.Coords;
 
 public class PuzzleRenderer {
     
     private Graphics2D g;
     private double scale;
     private IPuzzle puzzle;
-    private Bounds bounds;
+    private Rect2dI bounds;
     
     private void drawFloor() {
         g.setColor(Color.WHITE);
@@ -118,7 +118,7 @@ public class PuzzleRenderer {
             scale = Math.min(((double)dim.width) / (bounds.width() + 2),
                     ((double)dim.height) / (bounds.height() + 2));
             // move the graph into view
-            g.translate(scale * (1 - bounds.left), scale * (1 - bounds.top));
+            g.translate(scale * (1 - bounds.left()), scale * (1 - bounds.top()));
             
             drawBounds();
             drawMap();

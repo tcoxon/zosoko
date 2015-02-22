@@ -1,7 +1,7 @@
 package net.bytten.zosoko.generator;
 
 import net.bytten.zosoko.Tile;
-import net.bytten.zosoko.util.Coords;
+import net.bytten.gameutil.Coords;
 
 public enum Template {
 

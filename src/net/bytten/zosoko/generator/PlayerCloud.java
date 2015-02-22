@@ -3,7 +3,7 @@ package net.bytten.zosoko.generator;
 import java.util.TreeSet;
 
 import net.bytten.zosoko.IPuzzleMap;
-import net.bytten.zosoko.util.Coords;
+import net.bytten.gameutil.Coords;
 
 public class PlayerCloud implements Comparable<PlayerCloud> {
 
