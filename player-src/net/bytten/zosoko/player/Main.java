@@ -15,12 +15,12 @@ import java.util.TimerTask;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import net.bytten.gameutil.logging.StdoutLogger;
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.generator.BoxLinesScoringMetric;
 import net.bytten.zosoko.generator.IPuzzleGenerator;
 import net.bytten.zosoko.generator.PuzzleGenerator;
 import net.bytten.zosoko.generator.TestPuzzleGenerator;
-import net.bytten.zosoko.util.StdoutLogger;
 
 
 public class Main extends JPanel implements KeyListener {
