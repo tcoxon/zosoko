@@ -99,7 +99,7 @@ public class PuzzleMap implements IPuzzleMap {
             if (boxes.contains(current))
                 continue;
             
-            for (Direction d: Direction.values()) {
+            for (Direction d: Direction.COMPASS_DIRECTIONS) {
                 Coords neighbor = current.add(d.x,d.y);
                 if (!bounds.contains(neighbor)) {
                     if (!searchedEdges && !map.isPlayerBounded()) {
