@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 
 public class PuzzleState implements Comparable<PuzzleState> {
     
     public static class Builder {
         protected PuzzleState state;
         
-        public Builder(PuzzleMap map, List<Coords> goals) {
+        public Builder(PuzzleMap map, List<Vec2I> goals) {
             state = new PuzzleState(map, goals);
         }
         
@@ -22,7 +22,7 @@ public class PuzzleState implements Comparable<PuzzleState> {
             return this;
         }
 
-        public Builder setPlayer(Coords player) {
+        public Builder setPlayer(Vec2I player) {
             // the floor partition the given coords are in depends on where
             // the boxes are.
             assert state.boxes != null;
@@ -31,7 +31,7 @@ public class PuzzleState implements Comparable<PuzzleState> {
             return this;
         }
 
-        public Builder setBoxes(List<Coords> boxes) {
+        public Builder setBoxes(List<Vec2I> boxes) {
             state.boxes = boxes;
             return this;
         }
@@ -49,14 +49,14 @@ public class PuzzleState implements Comparable<PuzzleState> {
     }
 
     protected PuzzleMap map;
-    protected List<Coords> goals;
+    protected List<Vec2I> goals;
     
     protected PlayerCloud player;
-    protected List<Coords> boxes;
+    protected List<Vec2I> boxes;
     
     protected ActionPath path;
     
-    protected PuzzleState(PuzzleMap map, List<Coords> goals) {
+    protected PuzzleState(PuzzleMap map, List<Vec2I> goals) {
         this.map = map;
         this.goals = goals;
     }
@@ -70,13 +70,13 @@ public class PuzzleState implements Comparable<PuzzleState> {
         assert boxes.size() == o.boxes.size();
 
         // Go through the boxes in sorted order
-        List<Coords> myBoxes = new ArrayList<Coords>(boxes),
-                otherBoxes = new ArrayList<Coords>(o.boxes);
+        List<Vec2I> myBoxes = new ArrayList<Vec2I>(boxes),
+                otherBoxes = new ArrayList<Vec2I>(o.boxes);
         Collections.sort(myBoxes);
         Collections.sort(otherBoxes);
         
         for (int i = 0; i < myBoxes.size(); ++i) {
-            Coords box = myBoxes.get(i),
+            Vec2I box = myBoxes.get(i),
                    obox = otherBoxes.get(i);
             int cmp = box.compareTo(obox);
             if (cmp != 0) return cmp;
@@ -90,8 +90,8 @@ public class PuzzleState implements Comparable<PuzzleState> {
     public boolean equals(Object o) {
         if (o instanceof PuzzleState) {
             PuzzleState other = (PuzzleState)o;
-            Set<Coords> myBoxes = new TreeSet<Coords>(boxes),
-                    otherBoxes = new TreeSet<Coords>(other.boxes);
+            Set<Vec2I> myBoxes = new TreeSet<Vec2I>(boxes),
+                    otherBoxes = new TreeSet<Vec2I>(other.boxes);
             if (myBoxes.equals(otherBoxes) && player.equals(other.player)) {
                 if (getBoxLines() < other.getBoxLines()) {
                     other.path = path;
@@ -108,7 +108,7 @@ public class PuzzleState implements Comparable<PuzzleState> {
         return player;
     }
 
-    public List<Coords> getBoxes() {
+    public List<Vec2I> getBoxes() {
         return boxes;
     }
 
@@ -116,7 +116,7 @@ public class PuzzleState implements Comparable<PuzzleState> {
         return path == null ? 0 : path.getBoxLines();
     }
 
-    public List<Coords> getGoals() {
+    public List<Vec2I> getGoals() {
         return goals;
     }
 

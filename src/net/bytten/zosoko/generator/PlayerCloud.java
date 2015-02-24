@@ -3,7 +3,7 @@ package net.bytten.zosoko.generator;
 import java.util.TreeSet;
 
 import net.bytten.zosoko.IPuzzleMap;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 
 public class PlayerCloud implements Comparable<PlayerCloud> {
 
@@ -14,9 +14,9 @@ public class PlayerCloud implements Comparable<PlayerCloud> {
     // Or maybe use A* to determine if two PlayerClouds' coords are in the
     // same partition (at the cost of making equals() more expensive).
     
-    protected TreeSet<Coords> coords;
+    protected TreeSet<Vec2I> coords;
     
-    public PlayerCloud(TreeSet<Coords> coords) {
+    public PlayerCloud(TreeSet<Vec2I> coords) {
         this.coords = coords;
     }
     
@@ -32,7 +32,7 @@ public class PlayerCloud implements Comparable<PlayerCloud> {
 
     // Returns one of the coords in this cloud. Not guaranteed to return any
     // particular coordinates.
-    public Coords getAnyCoords() {
+    public Vec2I getAnyCoords() {
         return coords.first();
     }
 
@@ -44,16 +44,16 @@ public class PlayerCloud implements Comparable<PlayerCloud> {
         return coords.first().compareTo(o.coords.first());
     }
 
-    public boolean canReach(Coords box) {
+    public boolean canReach(Vec2I box) {
         return coords.contains(box);
     }
 
-    public TreeSet<Coords> getCoordsSet() {
+    public TreeSet<Vec2I> getCoordsSet() {
         return coords;
     }
 
     public boolean touchesEdge(IPuzzleMap map) {
-        for (Coords pos: coords) {
+        for (Vec2I pos: coords) {
             if (pos.x <= 0 || pos.y <= 0 || pos.x >= map.getWidth()-1 ||
                     pos.y >= map.getHeight()-1)
                 return true;

@@ -8,7 +8,7 @@ import java.util.TreeSet;
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.gameutil.Rect2dI;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 import net.bytten.gameutil.Direction;
 
 public class MapConstraints {
@@ -21,12 +21,12 @@ public class MapConstraints {
         this.boxes = boxes;
     }
     
-    protected void checkConnectivity(IPuzzleMap map, Set<Coords> floorTiles)
+    protected void checkConnectivity(IPuzzleMap map, Set<Vec2I> floorTiles)
             throws RetryException {
         // The map should have one contiguous space of floor 
         Rect2dI bounds = map.getBounds();
-        Set<Coords> unconnected = new TreeSet<Coords>(floorTiles);
-        List<Coords> queue = new ArrayList<Coords>();
+        Set<Vec2I> unconnected = new TreeSet<Vec2I>(floorTiles);
+        List<Vec2I> queue = new ArrayList<Vec2I>();
         
         if (unconnected.size() == 0) throw new RetryException();
         
@@ -34,11 +34,11 @@ public class MapConstraints {
         unconnected.remove(queue.get(0));
         
         while (!queue.isEmpty() && !unconnected.isEmpty()) {
-            Coords current = queue.remove(0);
+            Vec2I current = queue.remove(0);
             
             for (Direction d: Direction.CARDINALS) {
                 if (bounds.contains(current.add(d.x, d.y))) {
-                    Coords neighbor = current.add(d.x,d.y);
+                    Vec2I neighbor = current.add(d.x,d.y);
                     if (map.getTile(neighbor.x, neighbor.y) == Tile.FLOOR &&
                             unconnected.contains(neighbor)) {
                         unconnected.remove(neighbor);
@@ -52,10 +52,10 @@ public class MapConstraints {
     }
     
     // Does the map contain a 4x3 or 3x4 space of floor tiles?
-    protected boolean startsOpenSpace(Coords topLeft, Set<Coords> floorTiles) {
+    protected boolean startsOpenSpace(Vec2I topLeft, Set<Vec2I> floorTiles) {
         for (int dx = 0; dx < 3; ++dx)
         for (int dy = 0; dy < 3; ++dy) {
-            Coords xy = topLeft.add(dx,dy);
+            Vec2I xy = topLeft.add(dx,dy);
             if (!floorTiles.contains(xy))
                 return false;
         }
@@ -63,7 +63,7 @@ public class MapConstraints {
         int dx = 3;
         boolean clear = true;
         for (int dy = 0; dy < 3; ++dy) {
-            Coords xy = topLeft.add(dx,dy);
+            Vec2I xy = topLeft.add(dx,dy);
             if (!floorTiles.contains(xy))
                 clear = false;
         }
@@ -71,7 +71,7 @@ public class MapConstraints {
         
         int dy = 3;
         for (dx = 0; dx < 3; ++dx) {
-            Coords xy = topLeft.add(dx,dy);
+            Vec2I xy = topLeft.add(dx,dy);
             if (!floorTiles.contains(xy))
                 return false;
         }
@@ -79,16 +79,16 @@ public class MapConstraints {
         return true;
     }
     
-    protected void checkOpenSpaces(Set<Coords> floorTiles)
+    protected void checkOpenSpaces(Set<Vec2I> floorTiles)
             throws RetryException {
         // Any map with a 3x4 or 4x3 space of open floor is discarded
-        for (Coords xy: floorTiles) {
+        for (Vec2I xy: floorTiles) {
             if (startsOpenSpace(xy, floorTiles))
                 throw new RetryException();
         }
     }
     
-    protected void checkEnoughSpaces(IPuzzleMap map, Set<Coords> floorTiles)
+    protected void checkEnoughSpaces(IPuzzleMap map, Set<Vec2I> floorTiles)
             throws RetryException {
         // The map must have enough space for the player, the planned number of
         // boxes and goals and at least one empty space
@@ -101,15 +101,15 @@ public class MapConstraints {
             throw new RetryException();
     }
     
-    protected void checkSurroundedFloor(IPuzzleMap map, Set<Coords> floorTiles)
+    protected void checkSurroundedFloor(IPuzzleMap map, Set<Vec2I> floorTiles)
             throws RetryException {
         // if the map contains any floor tiles surrounded on three sides by
         // walls, it is discarded
         Rect2dI bounds = map.getBounds();
-        for (Coords xy: floorTiles) {
+        for (Vec2I xy: floorTiles) {
             int walls = 0;
             for (Direction d: Direction.CARDINALS) {
-                Coords neighbor = xy.add(d.x,d.y);
+                Vec2I neighbor = xy.add(d.x,d.y);
                 if (!bounds.contains(neighbor)) {
                     ++walls;
                 } else if (map.getTile(neighbor.x, neighbor.y) == Tile.WALL) {
@@ -140,7 +140,7 @@ public class MapConstraints {
     
     public void check(IPuzzleMap map)
             throws RetryException {
-        Set<Coords> floorTiles = new TreeSet<Coords>(
+        Set<Vec2I> floorTiles = new TreeSet<Vec2I>(
                 PuzzleMap.getFloorTiles(map));
         checkEnoughSpaces(map, floorTiles);
         checkConnectivity(map, floorTiles);

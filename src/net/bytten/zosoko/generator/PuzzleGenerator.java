@@ -6,7 +6,7 @@ import java.util.Random;
 
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.Tile;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 import net.bytten.gameutil.logging.ILogger;
 
 public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
@@ -55,9 +55,9 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
         this.logger = logger;
     }
     
-    protected Coords choosePlayerPos(PuzzleState bestStartState)
+    protected Vec2I choosePlayerPos(PuzzleState bestStartState)
             throws RetryException {
-        for (Coords xy: bestStartState.getPlayer().getCoordsSet()) {
+        for (Vec2I xy: bestStartState.getPlayer().getCoordsSet()) {
             if (!bestStartState.getBoxes().contains(xy))
                 return xy;
         }
@@ -70,15 +70,15 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
         logActions(actions.getPrevious());
     }
     
-    protected void logSolution(PuzzleState startState, Coords playerPos) {
+    protected void logSolution(PuzzleState startState, Vec2I playerPos) {
         if (logger == null) return;
         log("Solution:");
         log("    Goals:");
-        for (Coords goal: startState.getGoals()) {
+        for (Vec2I goal: startState.getGoals()) {
             log("        "+goal.toString());
         }
         log("    Boxes:");
-        for (Coords box: startState.getBoxes()) {
+        for (Vec2I box: startState.getBoxes()) {
             log("        "+box.toString());
         }
         log("    Player: "+playerPos.toString());
@@ -117,7 +117,7 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
                 while (goalSupplier.hasMore() &&
                         (timeLimit == null ||
                         new Date().getTime()-startTime < timeLimit)) {
-                    List<Coords> goals = goalSupplier.next();
+                    List<Vec2I> goals = goalSupplier.next();
                     
                     FarthestStateFinder.Result result = farthestStateFinder.go(
                             puzzleMap, goals);
@@ -139,12 +139,12 @@ public class PuzzleGenerator implements IPuzzleGenerator, ILogger {
                 log("Siblings: "+bestResult.siblings);
                 
                 PuzzleState bestStartState = bestResult.startState;
-                for (Coords goal: bestStartState.getGoals()) {
+                for (Vec2I goal: bestStartState.getGoals()) {
                     puzzleMap.setTile(goal.x, goal.y, Tile.GOAL);
                 }
                 
                 // DONE!
-                Coords playerPos = choosePlayerPos(bestStartState);
+                Vec2I playerPos = choosePlayerPos(bestStartState);
                 puzzle = new Puzzle(puzzleMap, bestStartState.getBoxes(),
                         playerPos);
                 

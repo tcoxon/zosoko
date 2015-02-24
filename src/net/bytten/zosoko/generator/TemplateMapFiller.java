@@ -2,7 +2,7 @@ package net.bytten.zosoko.generator;
 
 import java.util.Random;
 
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 
 public class TemplateMapFiller {
 
@@ -14,25 +14,25 @@ public class TemplateMapFiller {
     
     protected boolean templateFits(TemplateMap map, Template template,
             TemplateTransform transform, int x, int y) {
-        if (!template.check(map, transform, new Coords(x,y)))
+        if (!template.check(map, transform, new Vec2I(x,y)))
             return false;
         // check the neighbors already placed fit with this template...
         if (x > 0) {
             Template tpl = map.getTemplate(x-1, y);
             TemplateTransform xfm = map.getTransform(x-1, y);
-            if (!tpl.check(map, xfm, new Coords(x-1, y)))
+            if (!tpl.check(map, xfm, new Vec2I(x-1, y)))
                 return false;
         }
         if (y > 0) {
             Template tpl = map.getTemplate(x, y-1);
             TemplateTransform xfm = map.getTransform(x, y-1);
-            if (!tpl.check(map, xfm, new Coords(x, y-1)))
+            if (!tpl.check(map, xfm, new Vec2I(x, y-1)))
                 return false;
         }
         if (x > 0 && y > 0) {
             Template tpl = map.getTemplate(x-1, y-1);
             TemplateTransform xfm = map.getTransform(x-1, y-1);
-            if (!tpl.check(map, xfm, new Coords(x-1, y-1)))
+            if (!tpl.check(map, xfm, new Vec2I(x-1, y-1)))
                 return false;
         }
         

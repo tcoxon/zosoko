@@ -7,7 +7,7 @@ import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.gameutil.Rect2dI;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 
 class MappedPuzzle implements IPuzzle {
     
@@ -18,13 +18,13 @@ class MappedPuzzle implements IPuzzle {
     }
     
     @Override
-    public List<Coords> getBoxStartPositions() {
-        return new ArrayList<Coords>(0);
+    public List<Vec2I> getBoxStartPositions() {
+        return new ArrayList<Vec2I>(0);
     }
 
     @Override
-    public Coords getPlayerStartPosition() {
-        return new Coords(0,0);
+    public Vec2I getPlayerStartPosition() {
+        return new Vec2I(0,0);
     }
 
     @Override

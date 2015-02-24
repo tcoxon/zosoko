@@ -6,13 +6,13 @@ import java.util.List;
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.Tile;
 import net.bytten.gameutil.Rect2dI;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 
 public class PlayingPuzzle implements IPuzzle {
 
     IPuzzle puzzle;
-    Coords playerPosition;
-    List<Coords> boxPositions;
+    Vec2I playerPosition;
+    List<Vec2I> boxPositions;
     
     public PlayingPuzzle(IPuzzle puzzle) {
         this.puzzle = puzzle;
@@ -21,16 +21,16 @@ public class PlayingPuzzle implements IPuzzle {
     
     public void reset() {
         playerPosition = getPlayerStartPosition();
-        boxPositions = new ArrayList<Coords>(getBoxStartPositions());
+        boxPositions = new ArrayList<Vec2I>(getBoxStartPositions());
     }
 
     @Override
-    public List<Coords> getBoxStartPositions() {
+    public List<Vec2I> getBoxStartPositions() {
         return puzzle.getBoxStartPositions();
     }
 
     @Override
-    public Coords getPlayerStartPosition() {
+    public Vec2I getPlayerStartPosition() {
         return puzzle.getPlayerStartPosition();
     }
 
@@ -44,15 +44,15 @@ public class PlayingPuzzle implements IPuzzle {
         return puzzle.getTile(x, y);
     }
 
-    public Coords getPlayerPosition() {
+    public Vec2I getPlayerPosition() {
         return playerPosition;
     }
 
-    public void setPlayerPosition(Coords playerPosition) {
+    public void setPlayerPosition(Vec2I playerPosition) {
         this.playerPosition = playerPosition;
     }
 
-    public List<Coords> getBoxPositions() {
+    public List<Vec2I> getBoxPositions() {
         return boxPositions;
     }
 
@@ -73,7 +73,7 @@ public class PlayingPuzzle implements IPuzzle {
     
     public boolean isWon() {
         // The puzzle is won when all boxes are on goal tiles
-        for (Coords box: boxPositions) {
+        for (Vec2I box: boxPositions) {
             if (puzzle.getTile(box.x, box.y) != Tile.GOAL)
                 return false;
         }

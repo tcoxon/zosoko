@@ -3,7 +3,7 @@ package net.bytten.zosoko.generator;
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.gameutil.Rect2dI;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 
 public class TemplateMap implements IPuzzleMap {
     
@@ -23,12 +23,12 @@ public class TemplateMap implements IPuzzleMap {
         transforms = new TemplateTransform[tplCols][tplRows];
     }
     
-    boolean containsTemplate(Coords pos) {
+    boolean containsTemplate(Vec2I pos) {
         return pos.x >= 0 && pos.x < templates.length && pos.y >= 0 &&
                 pos.y < templates[0].length;
     }
     
-    Template getTemplate(Coords pos) {
+    Template getTemplate(Vec2I pos) {
         return getTemplate(pos.x, pos.y);
     }
     
@@ -36,7 +36,7 @@ public class TemplateMap implements IPuzzleMap {
         return templates[x][y];
     }
     
-    TemplateTransform getTransform(Coords pos) {
+    TemplateTransform getTransform(Vec2I pos) {
         return getTransform(pos.x, pos.y);
     }
     
@@ -60,10 +60,10 @@ public class TemplateMap implements IPuzzleMap {
     public Tile getTile(int x, int y) {
         int tplX = x / 3,
             tplY = y / 3;
-        Coords tplPos = new Coords(tplX, tplY);
+        Vec2I tplPos = new Vec2I(tplX, tplY);
         int sx = x % 3,
             sy = y % 3;
-        Coords tilePos = new Coords(sx, sy);
+        Vec2I tilePos = new Vec2I(sx, sy);
         
         Template tpl = getTemplate(tplPos);
         TemplateTransform xfm = getTransform(tplPos);

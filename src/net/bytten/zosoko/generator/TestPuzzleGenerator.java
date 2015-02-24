@@ -6,7 +6,7 @@ import java.util.List;
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.Tile;
 import net.bytten.gameutil.Rect2dI;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 
 public class TestPuzzleGenerator implements IPuzzleGenerator {
 
@@ -26,16 +26,16 @@ public class TestPuzzleGenerator implements IPuzzleGenerator {
         }
 
         @Override
-        public List<Coords> getBoxStartPositions() {
-            List<Coords> result = new ArrayList<Coords>(2);
-            result.add(new Coords(1,1));
-            result.add(new Coords(3,0));
+        public List<Vec2I> getBoxStartPositions() {
+            List<Vec2I> result = new ArrayList<Vec2I>(2);
+            result.add(new Vec2I(1,1));
+            result.add(new Vec2I(3,0));
             return result;
         }
 
         @Override
-        public Coords getPlayerStartPosition() {
-            return new Coords(0,0);
+        public Vec2I getPlayerStartPosition() {
+            return new Vec2I(0,0);
         }
 
         @Override

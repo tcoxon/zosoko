@@ -6,15 +6,15 @@ import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.gameutil.Rect2dI;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 
 public class Puzzle implements IPuzzle {
     
     protected IPuzzleMap map;
-    protected List<Coords> boxes;
-    protected Coords player;
+    protected List<Vec2I> boxes;
+    protected Vec2I player;
 
-    public Puzzle(IPuzzleMap puzzleMap, List<Coords> boxes, Coords player) {
+    public Puzzle(IPuzzleMap puzzleMap, List<Vec2I> boxes, Vec2I player) {
         this.map = puzzleMap;
         this.boxes = boxes;
         this.player = player;
@@ -41,12 +41,12 @@ public class Puzzle implements IPuzzle {
     }
 
     @Override
-    public List<Coords> getBoxStartPositions() {
+    public List<Vec2I> getBoxStartPositions() {
         return boxes;
     }
 
     @Override
-    public Coords getPlayerStartPosition() {
+    public Vec2I getPlayerStartPosition() {
         return player;
     }
 

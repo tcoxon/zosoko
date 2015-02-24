@@ -47,7 +47,7 @@ The best results seem to be given with widths and heights that are multiples of
 * Profiling indicates the slowest part is PuzzleMap.getPlayerSpacePartition().
   The use of this can be eliminated entirely by implementing the suggestions in
   PlayerCloud, or maybe there is a way to speed it up?
-* After that is Coords.add, which must mean that there are no further
+* After that is Vec2I.add, which must mean that there are no further
   bottlenecks.
 * See if making FarthestStateFinder.go return a set of states would make the
   default scoring metric work better.

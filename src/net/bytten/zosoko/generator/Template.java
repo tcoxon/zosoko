@@ -1,7 +1,7 @@
 package net.bytten.zosoko.generator;
 
 import net.bytten.zosoko.Tile;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 
 public enum Template {
 
@@ -166,14 +166,14 @@ public enum Template {
         this(tiles, mkreqs());
     }
     
-    public boolean check(TemplateMap map, TemplateTransform xfm, Coords index) {
+    public boolean check(TemplateMap map, TemplateTransform xfm, Vec2I index) {
         for (Require req: reqs) {
-            Coords neighborPos = index.add(xfm.unapply(req.d));
+            Vec2I neighborPos = index.add(xfm.unapply(req.d));
             if (!map.containsTemplate(neighborPos)) return false;
             Template neighbor = map.getTemplate(neighborPos);
             if (neighbor == null) continue;
             
-            Coords tilePos = map.getTransform(neighborPos).applyTile(
+            Vec2I tilePos = map.getTransform(neighborPos).applyTile(
                     xfm.unapplyTile(req.s));
             if (neighbor.tiles[tilePos.x][tilePos.y] != req.mustBe)
                 return false;
@@ -182,7 +182,7 @@ public enum Template {
     }
     
     private static class Require {
-        Coords d, // delta relative to the position of the template
+        Vec2I d, // delta relative to the position of the template
                s; // position of the tile in neighboring template
         Tile mustBe;
     }
@@ -202,8 +202,8 @@ public enum Template {
     private static Require mkreq(int dx, int dy, int sx, int sy,
             Tile mustBe) {
         Require req = new Require();
-        req.d = new Coords(dx, dy);
-        req.s = new Coords(sx, sy);
+        req.d = new Vec2I(dx, dy);
+        req.s = new Vec2I(sx, sy);
         req.mustBe = mustBe;
         return req;
     }

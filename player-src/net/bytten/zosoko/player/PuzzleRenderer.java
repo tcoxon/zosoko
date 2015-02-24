@@ -9,7 +9,7 @@ import java.awt.geom.AffineTransform;
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.Tile;
 import net.bytten.gameutil.Rect2dI;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 
 public class PuzzleRenderer {
     
@@ -79,7 +79,7 @@ public class PuzzleRenderer {
         }
     }
     
-    private void drawBox(Coords xy) {
+    private void drawBox(Vec2I xy) {
         AffineTransform origXfm = g.getTransform();
         g.translate((int)(xy.x * scale), (int)(xy.y * scale));
         
@@ -90,7 +90,7 @@ public class PuzzleRenderer {
         g.setTransform(origXfm);
     }
     
-    private void drawPlayer(Coords xy) {
+    private void drawPlayer(Vec2I xy) {
         AffineTransform origXfm = g.getTransform();
         g.translate((int)(xy.x * scale), (int)(xy.y * scale));
         
@@ -125,7 +125,7 @@ public class PuzzleRenderer {
             
             if (puzzle instanceof PlayingPuzzle) {
                 PlayingPuzzle ppuzzle = (PlayingPuzzle)puzzle;
-                for (Coords xy: ppuzzle.getBoxPositions()) {
+                for (Vec2I xy: ppuzzle.getBoxPositions()) {
                     drawBox(xy);
                 }
                 drawPlayer(ppuzzle.getPlayerPosition());
@@ -134,7 +134,7 @@ public class PuzzleRenderer {
                     drawWin();
                 }
             } else {
-                for (Coords xy: puzzle.getBoxStartPositions()) {
+                for (Vec2I xy: puzzle.getBoxStartPositions()) {
                     drawBox(xy);
                 }
                 drawPlayer(puzzle.getPlayerStartPosition());

@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import net.bytten.zosoko.Tile;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 import net.bytten.gameutil.Direction;
 
 public class FarthestStateFinder {
@@ -41,12 +41,12 @@ public class FarthestStateFinder {
         return best;
     }
     
-    protected Set<PuzzleState> makeStartSet(List<Coords> goals)
+    protected Set<PuzzleState> makeStartSet(List<Vec2I> goals)
             throws RetryException {
         Set<PuzzleState> states = new TreeSet<PuzzleState>();
         // TODO put player into each available space partition. At the moment
         // it only places the player into one area
-        Coords player;
+        Vec2I player;
         if (!bounded) {
             player = PuzzleMap.getAnyBorderNonWallTile(map);
             if (player == null) throw new RetryException();
@@ -62,9 +62,9 @@ public class FarthestStateFinder {
     }
     
     protected PuzzleState derive(PuzzleState state, int box, Direction pull) {
-        List<Coords> boxes = state.getBoxes(),
-                newBoxes = new ArrayList<Coords>(boxes);
-        Coords newBoxPos = boxes.get(box).add(pull.x, pull.y),
+        List<Vec2I> boxes = state.getBoxes(),
+                newBoxes = new ArrayList<Vec2I>(boxes);
+        Vec2I newBoxPos = boxes.get(box).add(pull.x, pull.y),
                playerPos = newBoxPos.add(pull.x, pull.y);
         newBoxes.set(box, newBoxPos);
         
@@ -81,12 +81,12 @@ public class FarthestStateFinder {
         
         PlayerCloud player = state.getPlayer();
         for (int boxnum = 0; boxnum < state.getBoxes().size(); ++boxnum) {
-            Coords box = state.getBoxes().get(boxnum);
+            Vec2I box = state.getBoxes().get(boxnum);
             if (player.canReach(box)) {
                 for (Direction d: Direction.CARDINALS) {
                     // Since we're working backwards from the goal, the player
                     // _pulls_ boxes
-                    Coords nextBoxPos = box.add(d.x,d.y),
+                    Vec2I nextBoxPos = box.add(d.x,d.y),
                            nextPlayerPos = nextBoxPos.add(d.x,d.y);
                     if (!player.canReach(nextBoxPos)) continue;
                     if (state.getBoxes().contains(nextPlayerPos) ||
@@ -130,9 +130,9 @@ public class FarthestStateFinder {
         
     }
 
-    public Result go(PuzzleMap map, List<Coords> goals) throws RetryException {
+    public Result go(PuzzleMap map, List<Vec2I> goals) throws RetryException {
         this.map = map;
-        for (Coords goal: goals) {
+        for (Vec2I goal: goals) {
             map.setTile(goal.x, goal.y, Tile.GOAL);
         }
         try {
@@ -160,7 +160,7 @@ public class FarthestStateFinder {
             return new Result(chooseBest(prevSet), prevSet.size()-1);
         } finally {
             // Clear up afterwards: remove the goals
-            for (Coords goal: goals) {
+            for (Vec2I goal: goals) {
                 map.setTile(goal.x, goal.y, Tile.FLOOR);
             }
         }

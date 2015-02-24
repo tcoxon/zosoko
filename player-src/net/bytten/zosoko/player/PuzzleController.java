@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 
 import net.bytten.zosoko.Tile;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 
 public class PuzzleController {
     
@@ -18,13 +18,13 @@ public class PuzzleController {
         this.puzzle = puzzle;
     }
     
-    private boolean insideMap(Coords pos) {
+    private boolean insideMap(Vec2I pos) {
         return !(pos.x < 0 || pos.y < 0 ||
                 pos.x >= puzzle.getBounds().width() ||
                 pos.y >= puzzle.getBounds().height());
     }
     
-    private boolean validPlayerPos(Coords pos) {
+    private boolean validPlayerPos(Vec2I pos) {
         if (insideMap(pos) && puzzle.getTile(pos.x, pos.y) == Tile.WALL)
             return false;
         if (puzzle.isPlayerBounded()) {
@@ -37,7 +37,7 @@ public class PuzzleController {
     }
     
     private boolean tryMoveBox(int box, int dx, int dy) {
-        Coords pos = puzzle.getBoxPositions().get(box),
+        Vec2I pos = puzzle.getBoxPositions().get(box),
                newPos = pos.add(dx, dy);
         
         if (!insideMap(newPos) ||
@@ -50,13 +50,13 @@ public class PuzzleController {
     }
     
     private void move(int dx, int dy) {
-        Coords pos = puzzle.getPlayerPosition(),
+        Vec2I pos = puzzle.getPlayerPosition(),
                newPos = pos.add(dx,dy);
         
         if (!validPlayerPos(newPos))
             return;
         
-        List<Coords> boxes = puzzle.getBoxPositions();
+        List<Vec2I> boxes = puzzle.getBoxPositions();
         for (int box = 0; box < boxes.size(); ++box) {
             if (boxes.get(box).equals(newPos)) {
                 if (!tryMoveBox(box, dx, dy))

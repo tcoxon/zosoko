@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.gameutil.Rect2dI;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 import net.bytten.gameutil.Direction;
 
 public class GoalSupplier {
@@ -18,7 +18,7 @@ public class GoalSupplier {
     protected int attempts, boxes;
     protected Integer attemptLimit; // null => no limit
     protected boolean nonFloorAdjacentOnly;
-    protected List<List<Coords>> spaces;
+    protected List<List<Vec2I>> spaces;
     protected int[] indices;
     
     public GoalSupplier(Random rand, int boxes, IPuzzleMap map,
@@ -28,10 +28,10 @@ public class GoalSupplier {
         this.attemptLimit = attemptLimit;
         this.nonFloorAdjacentOnly = nonFloorAdjacentOnly;
         
-        spaces = new ArrayList<List<Coords>>(boxes);
-        List<Coords> floorTiles = getFloorTiles(map);
+        spaces = new ArrayList<List<Vec2I>>(boxes);
+        List<Vec2I> floorTiles = getFloorTiles(map);
         for (int i = 0; i < boxes; ++i) {
-            List<Coords> boxSpaces = new ArrayList<Coords>(floorTiles);
+            List<Vec2I> boxSpaces = new ArrayList<Vec2I>(floorTiles);
             Collections.shuffle(boxSpaces, rand);
             spaces.add(boxSpaces);
         }
@@ -42,15 +42,15 @@ public class GoalSupplier {
         skipOverlaps();
     }
     
-    protected List<Coords> getFloorTiles(IPuzzleMap map) {
+    protected List<Vec2I> getFloorTiles(IPuzzleMap map) {
         Rect2dI bounds = map.getBounds();
-        List<Coords> tiles = PuzzleMap.getFloorTiles(map);
+        List<Vec2I> tiles = PuzzleMap.getFloorTiles(map);
         if (nonFloorAdjacentOnly) {
-            List<Coords> newTiles = new ArrayList<Coords>(tiles.size());
-            for (Coords xy: tiles) {
+            List<Vec2I> newTiles = new ArrayList<Vec2I>(tiles.size());
+            for (Vec2I xy: tiles) {
                 boolean nonfloorNeighbor = false;
                 for (Direction d: Direction.CARDINALS) {
-                    Coords neighbor = xy.add(d.x,d.y);
+                    Vec2I neighbor = xy.add(d.x,d.y);
                     if (!bounds.contains(neighbor) ||
                             map.getTile(neighbor.x, neighbor.y) != Tile.FLOOR) {
                         nonfloorNeighbor = true;
@@ -88,10 +88,10 @@ public class GoalSupplier {
         }
     }
     
-    protected List<Coords> current() {
-        List<Coords> goals = new ArrayList<Coords>(boxes);
+    protected List<Vec2I> current() {
+        List<Vec2I> goals = new ArrayList<Vec2I>(boxes);
         int i = 0;
-        for (List<Coords> boxSpaces: spaces) {
+        for (List<Vec2I> boxSpaces: spaces) {
             goals.add(boxSpaces.get(indices[i]));
             ++i;
         }
@@ -100,18 +100,18 @@ public class GoalSupplier {
     
     protected void skipOverlaps() {
         // Skip combinations that have multiple goals at the same coords
-        while (hasMore() && new TreeSet<Coords>(current()).size() != boxes)
+        while (hasMore() && new TreeSet<Vec2I>(current()).size() != boxes)
             incrementIndices();
     }
     
-    public List<Coords> next() {
-        List<Coords> goals = current();
+    public List<Vec2I> next() {
+        List<Vec2I> goals = current();
         incrementIndices();
         skipOverlaps();
         attempts++;
         
         // the goals should not overlap
-        assert new TreeSet<Coords>(goals).size() == boxes;
+        assert new TreeSet<Vec2I>(goals).size() == boxes;
         return goals;
     }
 

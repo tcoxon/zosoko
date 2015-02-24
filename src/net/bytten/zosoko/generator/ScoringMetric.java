@@ -4,7 +4,7 @@ import java.util.Random;
 
 import net.bytten.zosoko.Tile;
 import net.bytten.gameutil.Rect2dI;
-import net.bytten.gameutil.Coords;
+import net.bytten.gameutil.Vec2I;
 import net.bytten.gameutil.Direction;
 
 public class ScoringMetric implements IScoringMetric {
@@ -22,10 +22,10 @@ public class ScoringMetric implements IScoringMetric {
                 + rand.nextInt(300);
     }
     
-    private boolean isTouchingWall(Coords box, PuzzleState state) {
+    private boolean isTouchingWall(Vec2I box, PuzzleState state) {
         Rect2dI bounds = state.getMap().getBounds();
         for (Direction d: Direction.CARDINALS) {
-            Coords neighbor = box.add(d.x,d.y);
+            Vec2I neighbor = box.add(d.x,d.y);
             if (!bounds.contains(neighbor)) {
                 if (state.getMap().isPlayerBounded())
                     return true;
@@ -37,18 +37,18 @@ public class ScoringMetric implements IScoringMetric {
         return false;
     }
     
-    private boolean isTouchingBox(Coords box, PuzzleState state) {
+    private boolean isTouchingBox(Vec2I box, PuzzleState state) {
         for (Direction d: Direction.CARDINALS) {
-            Coords neighbor = box.add(d.x,d.y);
+            Vec2I neighbor = box.add(d.x,d.y);
             if (state.getBoxes().contains(neighbor))
                 return true;
         }
         return false;
     }
     
-    private boolean isTouchingGoal(Coords goal, PuzzleState state) {
+    private boolean isTouchingGoal(Vec2I goal, PuzzleState state) {
         for (Direction d: Direction.CARDINALS) {
-            Coords neighbor = goal.add(d.x,d.y);
+            Vec2I neighbor = goal.add(d.x,d.y);
             if (state.getGoals().contains(neighbor))
                 return true;
         }
@@ -65,19 +65,19 @@ public class ScoringMetric implements IScoringMetric {
         // TODO: A box touching the player is worth 50, but we haven't decided
         // where the player will be yet...
         
-        for (Coords box: state.getBoxes()) {
+        for (Vec2I box: state.getBoxes()) {
             if (isTouchingWall(box, state))
                 score -= 150;
             if (isTouchingBox(box, state))
                 score += 30;
         }
-        for (Coords goal: state.getGoals()) {
+        for (Vec2I goal: state.getGoals()) {
             if (isTouchingGoal(goal, state))
                 score += 30;
         }
         
         // Penalize boxes already on goals:
-        for (Coords box: state.getBoxes()) {
+        for (Vec2I box: state.getBoxes()) {
             if (state.getGoals().contains(box))
                 score -= 100000;
         }
