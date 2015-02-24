@@ -83,7 +83,7 @@ public class FarthestStateFinder {
         for (int boxnum = 0; boxnum < state.getBoxes().size(); ++boxnum) {
             Coords box = state.getBoxes().get(boxnum);
             if (player.canReach(box)) {
-                for (Direction d: Direction.COMPASS_DIRECTIONS) {
+                for (Direction d: Direction.CARDINALS) {
                     // Since we're working backwards from the goal, the player
                     // _pulls_ boxes
                     Coords nextBoxPos = box.add(d.x,d.y),

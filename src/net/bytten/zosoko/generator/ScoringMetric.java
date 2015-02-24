@@ -24,7 +24,7 @@ public class ScoringMetric implements IScoringMetric {
     
     private boolean isTouchingWall(Coords box, PuzzleState state) {
         Rect2dI bounds = state.getMap().getBounds();
-        for (Direction d: Direction.COMPASS_DIRECTIONS) {
+        for (Direction d: Direction.CARDINALS) {
             Coords neighbor = box.add(d.x,d.y);
             if (!bounds.contains(neighbor)) {
                 if (state.getMap().isPlayerBounded())
@@ -38,7 +38,7 @@ public class ScoringMetric implements IScoringMetric {
     }
     
     private boolean isTouchingBox(Coords box, PuzzleState state) {
-        for (Direction d: Direction.COMPASS_DIRECTIONS) {
+        for (Direction d: Direction.CARDINALS) {
             Coords neighbor = box.add(d.x,d.y);
             if (state.getBoxes().contains(neighbor))
                 return true;
@@ -47,7 +47,7 @@ public class ScoringMetric implements IScoringMetric {
     }
     
     private boolean isTouchingGoal(Coords goal, PuzzleState state) {
-        for (Direction d: Direction.COMPASS_DIRECTIONS) {
+        for (Direction d: Direction.CARDINALS) {
             Coords neighbor = goal.add(d.x,d.y);
             if (state.getGoals().contains(neighbor))
                 return true;

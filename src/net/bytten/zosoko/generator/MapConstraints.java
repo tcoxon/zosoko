@@ -36,7 +36,7 @@ public class MapConstraints {
         while (!queue.isEmpty() && !unconnected.isEmpty()) {
             Coords current = queue.remove(0);
             
-            for (Direction d: Direction.COMPASS_DIRECTIONS) {
+            for (Direction d: Direction.CARDINALS) {
                 if (bounds.contains(current.add(d.x, d.y))) {
                     Coords neighbor = current.add(d.x,d.y);
                     if (map.getTile(neighbor.x, neighbor.y) == Tile.FLOOR &&
@@ -108,7 +108,7 @@ public class MapConstraints {
         Rect2dI bounds = map.getBounds();
         for (Coords xy: floorTiles) {
             int walls = 0;
-            for (Direction d: Direction.COMPASS_DIRECTIONS) {
+            for (Direction d: Direction.CARDINALS) {
                 Coords neighbor = xy.add(d.x,d.y);
                 if (!bounds.contains(neighbor)) {
                     ++walls;

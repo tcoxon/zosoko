@@ -49,7 +49,7 @@ public class GoalSupplier {
             List<Coords> newTiles = new ArrayList<Coords>(tiles.size());
             for (Coords xy: tiles) {
                 boolean nonfloorNeighbor = false;
-                for (Direction d: Direction.COMPASS_DIRECTIONS) {
+                for (Direction d: Direction.CARDINALS) {
                     Coords neighbor = xy.add(d.x,d.y);
                     if (!bounds.contains(neighbor) ||
                             map.getTile(neighbor.x, neighbor.y) != Tile.FLOOR) {
