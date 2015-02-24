@@ -2,7 +2,7 @@ package net.bytten.zosoko.generator;
 
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
-import net.bytten.gameutil.Rect2dI;
+import net.bytten.gameutil.Rect2I;
 import net.bytten.gameutil.Vec2I;
 
 public class TemplateMap implements IPuzzleMap {
@@ -44,8 +44,8 @@ public class TemplateMap implements IPuzzleMap {
         return transforms[x][y];
     }
     
-    public Rect2dI getBounds() {
-        return new Rect2dI(0, 0, width, height);
+    public Rect2I getBounds() {
+        return new Rect2I(0, 0, width, height);
     }
     
     public int getWidth() {

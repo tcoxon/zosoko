@@ -8,7 +8,7 @@ import java.awt.geom.AffineTransform;
 
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.Tile;
-import net.bytten.gameutil.Rect2dI;
+import net.bytten.gameutil.Rect2I;
 import net.bytten.gameutil.Vec2I;
 
 public class PuzzleRenderer {
@@ -16,7 +16,7 @@ public class PuzzleRenderer {
     private Graphics2D g;
     private double scale;
     private IPuzzle puzzle;
-    private Rect2dI bounds;
+    private Rect2I bounds;
     
     private void drawFloor() {
         g.setColor(Color.WHITE);

@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.bytten.zosoko.IPuzzle;
 import net.bytten.zosoko.Tile;
-import net.bytten.gameutil.Rect2dI;
+import net.bytten.gameutil.Rect2I;
 import net.bytten.gameutil.Vec2I;
 
 public class PlayingPuzzle implements IPuzzle {
@@ -35,7 +35,7 @@ public class PlayingPuzzle implements IPuzzle {
     }
 
     @Override
-    public Rect2dI getBounds() {
+    public Rect2I getBounds() {
         return puzzle.getBounds();
     }
 

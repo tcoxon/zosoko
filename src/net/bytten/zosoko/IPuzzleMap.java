@@ -1,10 +1,10 @@
 package net.bytten.zosoko;
 
-import net.bytten.gameutil.Rect2dI;
+import net.bytten.gameutil.Rect2I;
 
 public interface IPuzzleMap {
     
-    public Rect2dI getBounds();
+    public Rect2I getBounds();
     public int getWidth();
     public int getHeight();
     

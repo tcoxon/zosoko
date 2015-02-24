@@ -7,7 +7,7 @@ import java.util.TreeSet;
 
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
-import net.bytten.gameutil.Rect2dI;
+import net.bytten.gameutil.Rect2I;
 import net.bytten.gameutil.Vec2I;
 import net.bytten.gameutil.Direction;
 
@@ -24,7 +24,7 @@ public class MapConstraints {
     protected void checkConnectivity(IPuzzleMap map, Set<Vec2I> floorTiles)
             throws RetryException {
         // The map should have one contiguous space of floor 
-        Rect2dI bounds = map.getBounds();
+        Rect2I bounds = map.getBounds();
         Set<Vec2I> unconnected = new TreeSet<Vec2I>(floorTiles);
         List<Vec2I> queue = new ArrayList<Vec2I>();
         
@@ -105,7 +105,7 @@ public class MapConstraints {
             throws RetryException {
         // if the map contains any floor tiles surrounded on three sides by
         // walls, it is discarded
-        Rect2dI bounds = map.getBounds();
+        Rect2I bounds = map.getBounds();
         for (Vec2I xy: floorTiles) {
             int walls = 0;
             for (Direction d: Direction.CARDINALS) {

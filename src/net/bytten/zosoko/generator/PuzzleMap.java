@@ -7,7 +7,7 @@ import java.util.TreeSet;
 
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
-import net.bytten.gameutil.Rect2dI;
+import net.bytten.gameutil.Rect2I;
 import net.bytten.gameutil.Vec2I;
 import net.bytten.gameutil.Direction;
 
@@ -16,13 +16,13 @@ public class PuzzleMap implements IPuzzleMap {
     protected boolean bounded;
     protected Tile[][] tiles;
     protected int width, height;
-    protected Rect2dI bounds;
+    protected Rect2I bounds;
     
     public PuzzleMap(boolean bounded, int width, int height) {
         this.bounded = bounded;
         this.width = width;
         this.height = height;
-        this.bounds = new Rect2dI(0, 0, width, height);
+        this.bounds = new Rect2I(0, 0, width, height);
         tiles = new Tile[width][height];
     }
     
@@ -35,8 +35,8 @@ public class PuzzleMap implements IPuzzleMap {
     }
 
     @Override
-    public Rect2dI getBounds() {
-        return new Rect2dI(0, 0, width, height);
+    public Rect2I getBounds() {
+        return new Rect2I(0, 0, width, height);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class PuzzleMap implements IPuzzleMap {
 
     public static TreeSet<Vec2I> getPlayerSpacePartition(IPuzzleMap map,
             Collection<Vec2I> boxes, Vec2I containing) {
-        Rect2dI bounds = map.getBounds();
+        Rect2I bounds = map.getBounds();
         boolean searchedEdges = false;
         List<Vec2I> queue = new ArrayList<Vec2I>();
         TreeSet<Vec2I> visited = new TreeSet<Vec2I>();

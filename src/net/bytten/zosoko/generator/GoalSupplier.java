@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
-import net.bytten.gameutil.Rect2dI;
+import net.bytten.gameutil.Rect2I;
 import net.bytten.gameutil.Vec2I;
 import net.bytten.gameutil.Direction;
 
@@ -43,7 +43,7 @@ public class GoalSupplier {
     }
     
     protected List<Vec2I> getFloorTiles(IPuzzleMap map) {
-        Rect2dI bounds = map.getBounds();
+        Rect2I bounds = map.getBounds();
         List<Vec2I> tiles = PuzzleMap.getFloorTiles(map);
         if (nonFloorAdjacentOnly) {
             List<Vec2I> newTiles = new ArrayList<Vec2I>(tiles.size());
