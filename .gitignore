@@ -2,3 +2,4 @@ bin
 player-bin
 .settings
 /nbproject/private/
+/target/
