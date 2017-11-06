@@ -3,12 +3,12 @@ package net.bytten.zosoko.generator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.TreeSet;
 
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.gameutil.Rect2I;
 import net.bytten.gameutil.Vec2I;
+import net.bytten.gameutil.Vec2ISet;
 import net.bytten.gameutil.Direction;
 
 public class PuzzleMap implements IPuzzleMap {
@@ -83,12 +83,12 @@ public class PuzzleMap implements IPuzzleMap {
         return bounded;
     }
 
-    public static TreeSet<Vec2I> getPlayerSpacePartition(IPuzzleMap map,
+    public static Vec2ISet getPlayerSpacePartition(IPuzzleMap map,
             Collection<Vec2I> boxes, Vec2I containing) {
         Rect2I bounds = map.getBounds();
         boolean searchedEdges = false;
         List<Vec2I> queue = new ArrayList<Vec2I>();
-        TreeSet<Vec2I> visited = new TreeSet<Vec2I>();
+        Vec2ISet visited = new Vec2ISet();
         
         queue.add(containing);
         visited.add(containing);

@@ -1,6 +1,6 @@
 package net.bytten.zosoko.generator;
 
-import java.util.TreeSet;
+import java.util.*;
 
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.gameutil.Vec2I;
@@ -16,8 +16,8 @@ public class PlayerCloud implements Comparable<PlayerCloud> {
     
     protected TreeSet<Vec2I> coords;
     
-    public PlayerCloud(TreeSet<Vec2I> coords) {
-        this.coords = coords;
+    public PlayerCloud(Set<Vec2I> coords) {
+        this.coords = new TreeSet<Vec2I>(coords);
     }
     
     @Override
@@ -48,7 +48,7 @@ public class PlayerCloud implements Comparable<PlayerCloud> {
         return coords.contains(box);
     }
 
-    public TreeSet<Vec2I> getCoordsSet() {
+    public Set<Vec2I> getCoordsSet() {
         return coords;
     }
 

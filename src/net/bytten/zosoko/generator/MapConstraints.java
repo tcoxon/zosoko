@@ -3,12 +3,12 @@ package net.bytten.zosoko.generator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.gameutil.Rect2I;
 import net.bytten.gameutil.Vec2I;
+import net.bytten.gameutil.Vec2ISet;
 import net.bytten.gameutil.Direction;
 
 public class MapConstraints {
@@ -23,9 +23,9 @@ public class MapConstraints {
     
     protected void checkConnectivity(IPuzzleMap map, Set<Vec2I> floorTiles)
             throws RetryException {
-        // The map should have one contiguous space of floor 
+        // The map should have one contiguous space of floor
         Rect2I bounds = map.getBounds();
-        Set<Vec2I> unconnected = new TreeSet<Vec2I>(floorTiles);
+        Set<Vec2I> unconnected = new Vec2ISet(floorTiles);
         List<Vec2I> queue = new ArrayList<Vec2I>();
         
         if (unconnected.size() == 0) throw new RetryException();
@@ -140,7 +140,7 @@ public class MapConstraints {
     
     public void check(IPuzzleMap map)
             throws RetryException {
-        Set<Vec2I> floorTiles = new TreeSet<Vec2I>(
+        Set<Vec2I> floorTiles = new Vec2ISet(
                 PuzzleMap.getFloorTiles(map));
         checkEnoughSpaces(map, floorTiles);
         checkConnectivity(map, floorTiles);

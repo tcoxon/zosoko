@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import net.bytten.gameutil.Vec2I;
+import net.bytten.gameutil.Vec2ISet;
 
 public class PuzzleState implements Comparable<PuzzleState> {
     
@@ -90,8 +90,8 @@ public class PuzzleState implements Comparable<PuzzleState> {
     public boolean equals(Object o) {
         if (o instanceof PuzzleState) {
             PuzzleState other = (PuzzleState)o;
-            Set<Vec2I> myBoxes = new TreeSet<Vec2I>(boxes),
-                    otherBoxes = new TreeSet<Vec2I>(other.boxes);
+            Set<Vec2I> myBoxes = new Vec2ISet(boxes),
+                    otherBoxes = new Vec2ISet(other.boxes);
             if (myBoxes.equals(otherBoxes) && player.equals(other.player)) {
                 if (getBoxLines() < other.getBoxLines()) {
                     other.path = path;

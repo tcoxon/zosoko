@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.TreeSet;
 
 import net.bytten.zosoko.IPuzzleMap;
 import net.bytten.zosoko.Tile;
 import net.bytten.gameutil.Rect2I;
 import net.bytten.gameutil.Vec2I;
+import net.bytten.gameutil.Vec2ISet;
 import net.bytten.gameutil.Direction;
 
 public class GoalSupplier {
@@ -100,7 +100,7 @@ public class GoalSupplier {
     
     protected void skipOverlaps() {
         // Skip combinations that have multiple goals at the same coords
-        while (hasMore() && new TreeSet<Vec2I>(current()).size() != boxes)
+        while (hasMore() && new Vec2ISet(current()).size() != boxes)
             incrementIndices();
     }
     
@@ -111,7 +111,7 @@ public class GoalSupplier {
         attempts++;
         
         // the goals should not overlap
-        assert new TreeSet<Vec2I>(goals).size() == boxes;
+        assert new Vec2ISet(goals).size() == boxes;
         return goals;
     }
 
